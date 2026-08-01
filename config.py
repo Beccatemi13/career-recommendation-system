@@ -1,0 +1,5 @@
+MYSQL_HOST = "localhost"
+MYSQL_USER = "root"
+MYSQL_PASSWORD = "Intelligence_1"
+MYSQL_DB = "career_recommendation_system"
+SECRET_KEY = "career_recommendation_secret_key"
