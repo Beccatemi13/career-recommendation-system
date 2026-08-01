@@ -1,0 +1,391 @@
+/* ==========================================
+   LIGHT MODE
+========================================== */
+
+body{
+    background:#f5f7fb;
+    color:#212529;
+    transition:0.3s;
+}
+
+/* ==========================================
+   DARK MODE
+========================================== */
+
+body.dark-mode{
+
+    background:#121212 !important;
+
+    color:#f8f9fa !important;
+
+}
+
+/* ==========================================
+   NAVBAR
+========================================== */
+
+body.dark-mode .navbar{
+
+    background:#111827 !important;
+
+}
+
+/* ==========================================
+   CARDS
+========================================== */
+
+body.dark-mode .card,
+body.dark-mode .hero-card,
+body.dark-mode .dashboard-card,
+body.dark-mode .profile-card,
+body.dark-mode .info-card,
+body.dark-mode .setting-card,
+body.dark-mode .top-card{
+
+    background:#1f1f1f !important;
+
+    color:white !important;
+
+}
+
+/* ==========================================
+   HEADINGS
+========================================== */
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6{
+
+    color:white !important;
+
+}
+
+/* ==========================================
+   NORMAL TEXT
+========================================== */
+
+body.dark-mode p,
+body.dark-mode li,
+body.dark-mode span,
+body.dark-mode strong,
+body.dark-mode label,
+body.dark-mode small{
+
+    color:#f5f5f5 !important;
+
+}
+
+/* ==========================================
+   BOOTSTRAP TEXT COLORS
+========================================== */
+
+body.dark-mode .text-primary{
+
+    color:#66b2ff !important;
+
+}
+
+body.dark-mode .text-success{
+
+    color:#53d769 !important;
+
+}
+
+body.dark-mode .text-danger{
+
+    color:#ff6b6b !important;
+
+}
+
+body.dark-mode .text-warning{
+
+    color:#ffd54f !important;
+
+}
+
+body.dark-mode .text-info{
+
+    color:#4fc3f7 !important;
+
+}
+
+body.dark-mode .text-secondary{
+
+    color:#d0d0d0 !important;
+
+}
+
+body.dark-mode .text-dark{
+
+    color:white !important;
+
+}
+
+body.dark-mode .text-muted{
+
+    color:#cccccc !important;
+
+}
+
+/* ==========================================
+   FORMS
+========================================== */
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select{
+
+    background:#2b2b2b !important;
+
+    color:white !important;
+
+    border:1px solid #555;
+
+}
+
+body.dark-mode input::placeholder{
+
+    color:#bdbdbd;
+
+}
+
+/* ==========================================
+   INFO BOXES
+========================================== */
+
+body.dark-mode .info-box{
+
+    background:#2b2b2b !important;
+
+    color:white !important;
+
+    border-left:5px solid #66b2ff;
+
+}
+
+/* ==========================================
+   TABLES
+========================================== */
+
+body.dark-mode table,
+body.dark-mode th,
+body.dark-mode td{
+
+    background:#1f1f1f !important;
+
+    color:white !important;
+
+}
+
+/* ==========================================
+   ALERTS
+========================================== */
+
+body.dark-mode .alert{
+
+    background:#2b2b2b !important;
+
+    color:white !important;
+
+    border:none;
+
+}
+
+/* ==========================================
+   PROGRESS BAR
+========================================== */
+
+body.dark-mode .progress{
+
+    background:#444 !important;
+
+}
+
+body.dark-mode .progress-bar{
+
+    color:white !important;
+
+}
+
+/* ==========================================
+   BADGES
+========================================== */
+
+body.dark-mode .badge{
+
+    color:white !important;
+
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+body.dark-mode .btn{
+
+    opacity:1 !important;
+
+}
+
+body.dark-mode .btn-primary{
+
+    color:white !important;
+
+}
+
+body.dark-mode .btn-success{
+
+    color:white !important;
+
+}
+
+body.dark-mode .btn-danger{
+
+    color:white !important;
+
+}
+
+body.dark-mode .btn-info{
+
+    color:white !important;
+
+}
+
+body.dark-mode .btn-secondary{
+
+    color:white !important;
+
+}
+
+body.dark-mode .btn-warning{
+
+    color:black !important;
+
+}
+
+body.dark-mode .btn-outline-secondary{
+
+    color:white !important;
+
+    border-color:white !important;
+
+}
+
+body.dark-mode .btn-outline-secondary:hover{
+
+    background:white !important;
+
+    color:#121212 !important;
+
+}
+
+/* ==========================================
+   LINKS
+========================================== */
+
+body.dark-mode a{
+
+    color:#7ab7ff;
+
+}
+
+body.dark-mode a:hover{
+
+    color:#9fd0ff;
+
+}
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+body.dark-mode footer{
+
+    color:#cccccc !important;
+
+}
+
+/* ==========================================
+   HR
+========================================== */
+
+body.dark-mode hr{
+
+    border-color:#555;
+
+}
+
+/* ===================================
+   Bootstrap Modal Fix
+=================================== */
+
+.modal-content{
+    background:#ffffff !important;
+    color:#212529 !important;
+}
+
+.modal-header{
+    background:#ffffff;
+    color:#212529;
+}
+
+.modal-title{
+    color:#212529 !important;
+}
+
+.modal-body{
+    color:#212529 !important;
+}
+
+.modal-body p,
+.modal-body strong,
+.modal-body div{
+    color:#212529 !important;
+}
+
+.modal .btn-close{
+    filter:none;
+}
+
+/* ==========================================
+   FIX SUPPORT REQUEST MODAL
+========================================== */
+
+body.dark-mode .modal-content{
+    background:#ffffff !important;
+    color:#212529 !important;
+}
+
+body.dark-mode .modal-header{
+    background:#ffffff !important;
+    color:#212529 !important;
+}
+
+body.dark-mode .modal-title{
+    color:#212529 !important;
+}
+
+body.dark-mode .modal-body{
+    background:#ffffff !important;
+    color:#212529 !important;
+}
+
+body.dark-mode .modal-body p,
+body.dark-mode .modal-body span,
+body.dark-mode .modal-body strong,
+body.dark-mode .modal-body small,
+body.dark-mode .modal-body div{
+    color:#212529 !important;
+}
+
+body.dark-mode .modal-body .border{
+    background:#f8f9fa !important;
+    color:#212529 !important;
+}
+
+body.dark-mode .modal .btn-close{
+    filter:none !important;
+}

@@ -1,0 +1,327 @@
+/* ===========================================
+   RECOMMENDATION PAGE
+===========================================*/
+
+.info-card{
+
+    background:#ffffff;
+
+    border:none;
+
+    border-radius:15px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.info-card .card-body{
+
+    color:#222;
+
+}
+
+.section-title{
+
+    font-weight:700;
+
+    margin-bottom:20px;
+
+}
+
+/* ===========================================
+   DARK MODE ONLY FOR RECOMMENDATION PAGE
+===========================================*/
+
+body.dark-mode .info-card{
+
+    background:#1f1f1f !important;
+
+    border:1px solid #343434;
+
+}
+
+body.dark-mode .info-card .card-body{
+
+    background:#1f1f1f !important;
+
+    color:#ffffff !important;
+
+}
+
+body.dark-mode .info-card h1,
+body.dark-mode .info-card h2,
+body.dark-mode .info-card h3,
+body.dark-mode .info-card h4,
+body.dark-mode .info-card h5,
+body.dark-mode .info-card h6{
+
+    color:#ffffff !important;
+
+}
+
+body.dark-mode .info-card p{
+
+    color:#f2f2f2 !important;
+
+}
+
+body.dark-mode .info-card li{
+
+    color:#f2f2f2 !important;
+
+}
+
+body.dark-mode .section-title{
+
+    color:#4da3ff !important;
+
+}
+
+body.dark-mode .progress{
+
+    background:#444 !important;
+
+}
+
+body.dark-mode .badge{
+
+    color:#ffffff;
+
+}
+
+/* ===========================================
+   RECOMMENDATION SUMMARY
+===========================================*/
+
+.summary-box{
+
+    background:#f8f9fa;
+
+    border-left:5px solid #23408e;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    margin-bottom:25px;
+
+}
+
+.summary-box p{
+
+    color:#222;
+
+    margin:0;
+
+}
+
+/* ===========================================
+   DARK MODE
+===========================================*/
+
+body.dark-mode .summary-box{
+
+    background:#1f1f1f !important;
+
+    border-left:5px solid #4da3ff;
+
+    color:#ffffff !important;
+
+}
+
+body.dark-mode .summary-box p,
+
+body.dark-mode .summary-box strong{
+
+    color:#ffffff !important;
+
+}
+
+/* ===========================================
+   PRINT
+===========================================*/
+@media print{
+
+@page{
+
+    size:A4;
+
+    margin:0.5in;
+
+}
+
+body{
+
+    background:#ffffff !important;
+
+    color:#000 !important;
+
+    font-size:12pt;
+
+    line-height:1.4;
+
+}
+
+.container,
+.container-fluid{
+
+    width:100% !important;
+
+    max-width:100% !important;
+
+    margin:0 !important;
+
+    padding:0 !important;
+
+}
+
+.card,
+.info-card{
+
+    background:#ffffff !important;
+
+    color:#000 !important;
+
+    border:1px solid #000;
+
+    box-shadow:none !important;
+
+    margin-bottom:12px !important;
+
+    page-break-inside:avoid;
+
+}
+
+.card-body{
+
+    padding:15px !important;
+
+}
+
+h1{
+
+    font-size:24pt;
+
+    color:#000 !important;
+
+}
+
+h2{
+
+    font-size:20pt;
+
+    color:#000 !important;
+
+}
+
+h3{
+
+    font-size:16pt;
+
+    color:#000 !important;
+
+    margin-top:12px;
+
+}
+
+h4,h5{
+
+    color:#000 !important;
+
+}
+
+p,
+li,
+span{
+
+    color:#000 !important;
+
+    font-size:11pt;
+
+}
+
+.progress{
+
+    height:18px;
+
+    border:1px solid #000;
+
+}
+
+.progress-bar{
+
+    background:#000 !important;
+
+    color:#fff !important;
+
+}
+
+.badge{
+
+    background:#000 !important;
+
+    color:#fff !important;
+
+}
+
+.btn,
+
+.navbar,
+
+footer .btn,
+
+.sidebar,
+
+.topbar,
+
+.no-print{
+
+    display:none !important;
+
+}
+
+footer{
+
+    margin-top:20px;
+
+    color:#000 !important;
+
+    page-break-inside:avoid;
+
+}
+
+/* Keep Top 3 Careers together */
+
+.row{
+
+    page-break-inside:avoid;
+
+}
+
+/* Reduce spacing */
+
+.mb-5{
+
+    margin-bottom:15px !important;
+
+}
+
+.mt-5{
+
+    margin-top:15px !important;
+
+}
+
+.mb-4{
+
+    margin-bottom:10px !important;
+
+}
+
+.mt-4{
+
+    margin-top:10px !important;
+
+}
+
+}

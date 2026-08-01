@@ -1,0 +1,197 @@
+/* ===========================
+   GENERAL
+=========================== */
+
+body{
+    font-family: 'Poppins', sans-serif;
+    background: #F8FAFC;
+    color: #1F2937;
+}
+
+/* ===========================
+   NAVBAR
+=========================== */
+
+.navbar{
+    background: #1E3A8A !important;
+}
+
+.navbar-brand{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+/* ===========================
+   HERO SECTION
+=========================== */
+
+.hero{
+    background: linear-gradient(135deg,#EFF6FF,#DBEAFE);
+    padding:100px 0;
+    text-align:center;
+}
+
+.hero h1{
+    font-size:60px;
+    font-weight:700;
+    color:#1E3A8A;
+}
+
+.hero p{
+    font-size:22px;
+    color:#4B5563;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+
+.btn{
+    border-radius:10px;
+    padding:10px 25px;
+    font-weight:600;
+}
+
+.btn-primary{
+    background:#2563EB;
+    border:none;
+}
+
+.btn-primary:hover{
+    background:#1D4ED8;
+}
+
+.btn-success{
+    background:#10B981;
+    border:none;
+}
+
+.btn-outline-light:hover{
+    color:#1E3A8A;
+}
+
+/* ===========================
+   CARDS
+=========================== */
+
+.card{
+    border:none;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+/* ===========================
+   INPUTS
+=========================== */
+
+.form-control{
+    border-radius:10px;
+    padding:12px;
+}
+
+.form-control:focus{
+    border-color:#2563EB;
+    box-shadow:0 0 8px rgba(37,99,235,.3);
+}
+
+/* ===========================
+   HEADINGS
+=========================== */
+
+h1,h2,h3,h4,h5{
+    color:#1E3A8A;
+}
+
+/* ===========================
+   LINKS
+=========================== */
+
+a{
+    text-decoration:none;
+}
+
+a:hover{
+    text-decoration:none;
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+
+footer{
+    background:#1E3A8A;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+/* ==========================
+SIDEBAR
+========================== */
+
+.sidebar{
+
+    width:260px;
+
+    min-height:100vh;
+
+    background:#1E3A8A;
+
+    color:white;
+
+    padding:25px;
+
+}
+
+.sidebar a{
+
+    display:block;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:12px;
+
+    margin-bottom:10px;
+
+    border-radius:10px;
+
+    transition:.3s;
+
+}
+
+.sidebar a:hover{
+
+    background:#2563EB;
+
+}
+
+.sidebar .active{
+
+    background:#2563EB;
+
+}
+
+.profile img{
+
+    width:90px;
+
+    height:90px;
+
+}
+
+.content{
+
+    flex:1;
+
+    padding:40px;
+
+}
+
+.dashboard-card{
+
+    padding:25px;
+
+    text-align:center;
+
+}

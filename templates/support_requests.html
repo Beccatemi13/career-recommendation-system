@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+
+        My Support Requests
+
+    </title>
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+
+        *{
+
+            margin:0;
+
+            padding:0;
+
+            box-sizing:border-box;
+
+        }
+
+        body{
+
+            background:#f5f7fb;
+
+            font-family:Segoe UI, sans-serif;
+
+            color:#212529;
+
+        }
+
+        .top-bar{
+
+            background:#0d6efd;
+
+            color:white;
+
+            padding:18px 30px;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            box-shadow:0 3px 10px rgba(0,0,0,.12);
+
+        }
+
+        .top-bar h3{
+
+            margin:0;
+
+            font-weight:700;
+
+        }
+
+        .page-container{
+
+            max-width:1200px;
+
+            margin:40px auto;
+
+            padding:0 20px;
+
+        }
+
+        .support-card{
+
+            background:white;
+
+            border-radius:16px;
+
+            box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+            overflow:hidden;
+
+        }
+
+        .support-header{
+
+            background:#23408e;
+
+            color:white;
+
+            padding:22px 30px;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+        }
+
+        .support-header h4{
+
+            margin:0;
+
+            font-weight:700;
+
+        }
+
+        .table{
+
+            margin:0;
+
+        }
+
+        .table th{
+
+            background:#f8f9fa;
+
+            font-weight:700;
+
+            color:#444;
+
+            padding:15px;
+
+        }
+
+        .table td{
+
+            vertical-align:middle;
+
+            padding:15px;
+
+        }
+
+        .badge{
+
+            padding:8px 12px;
+
+            font-size:13px;
+
+        }
+
+        .btn-view{
+
+            border-radius:8px;
+
+            padding:7px 18px;
+
+        }
+
+        .btn-new{
+
+            border-radius:10px;
+
+            padding:10px 18px;
+
+            font-weight:600;
+
+        }
+
+        .modal-content{
+
+            border:none;
+
+            border-radius:18px;
+
+            overflow:hidden;
+
+        }
+
+        .modal-header{
+
+            background:#23408e;
+
+            color:white;
+
+            border:none;
+
+        }
+
+        .modal-title{
+
+            font-weight:700;
+
+        }
+
+        .btn-close{
+
+            filter:invert(1);
+
+        }
+
+        .modal-body{
+
+            padding:30px;
+
+        }
+
+        .section-title{
+
+            font-weight:700;
+
+            color:#23408e;
+
+            margin-bottom:8px;
+
+        }
+                .message-box{
+
+            background:#f8f9fa;
+
+            border:1px solid #dee2e6;
+
+            border-radius:12px;
+
+            padding:18px;
+
+            color:#212529;
+
+            font-size:15px;
+
+            line-height:1.8;
+
+            min-height:120px;
+
+            white-space:pre-wrap;
+
+        }
+
+        .reply-box{
+
+            background:#eef5ff;
+
+            border:1px solid #c8dcff;
+
+            border-left:5px solid #23408e;
+
+            border-radius:12px;
+
+            padding:18px;
+
+            color:#212529;
+
+            font-size:15px;
+
+            line-height:1.8;
+
+            min-height:120px;
+
+            white-space:pre-wrap;
+
+        }
+
+        .info-card{
+
+            background:#f8f9fa;
+
+            border-radius:12px;
+
+            padding:18px;
+
+            margin-top:20px;
+
+            border:1px solid #e9ecef;
+
+        }
+
+        .info-card strong{
+
+            color:#23408e;
+
+        }
+
+        .empty-state{
+
+            text-align:center;
+
+            padding:70px 20px;
+
+        }
+
+        .empty-state i{
+
+            font-size:70px;
+
+            color:#0d6efd;
+
+            margin-bottom:20px;
+
+        }
+
+        .empty-state h4{
+
+            font-weight:700;
+
+            margin-bottom:10px;
+
+        }
+
+        .empty-state p{
+
+            color:#6c757d;
+
+        }
+
+        @media (max-width:768px){
+
+            .top-bar{
+
+                flex-direction:column;
+
+                gap:15px;
+
+                text-align:center;
+
+            }
+
+            .support-header{
+
+                flex-direction:column;
+
+                gap:15px;
+
+                text-align:center;
+
+            }
+
+            .modal-body{
+
+                padding:20px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="top-bar">
+
+    <h3>
+
+        <i class="fas fa-headset me-2"></i>
+
+        Student Support Center
+
+    </h3>
+
+    <a
+
+        href="{{ url_for('dashboard') }}"
+
+        class="btn btn-light">
+
+        <i class="fas fa-arrow-left me-2"></i>
+
+        Dashboard
+
+    </a>
+
+</div>
+
+<div class="page-container">
+
+    <div class="support-card">
+
+        <div class="support-header">
+
+            <h4>
+
+                My Support Requests
+
+            </h4>
+
+            <a
+
+                href="{{ url_for('contact_admin') }}"
+
+                class="btn btn-success btn-new">
+
+                <i class="fas fa-plus-circle me-2"></i>
+
+                New Support Request
+
+            </a>
+
+        </div>
+
+        <div class="p-4">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="alert alert-{{ category }} alert-dismissible fade show">
+
+                        {{ message }}
+
+                        <button
+
+                            type="button"
+
+                            class="btn-close"
+
+                            data-bs-dismiss="alert">
+
+                        </button>
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+            {% endwith %}
+                        {% if requests %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Subject</th>
+
+                            <th>Status</th>
+
+                            <th>Submitted</th>
+
+                            <th class="text-center">
+
+                                Action
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for support in requests %}
+
+                        <tr>
+
+                            <td>
+
+                                {{ loop.index }}
+
+                            </td>
+
+                            <td>
+
+                                {{ support[1] }}
+
+                            </td>
+
+                            <td>
+
+                                {% if support[4] == "Resolved" %}
+
+                                    <span class="badge bg-success">
+
+                                        Resolved
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        Pending
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {{ support[5].strftime('%d %b %Y %I:%M %p') }}
+
+                            </td>
+
+                            <td class="text-center">
+
+                                <button
+
+                                    class="btn btn-primary btn-view"
+
+                                    data-bs-toggle="modal"
+
+                                    data-bs-target="#requestModal{{ support[0] }}">
+
+                                    <i class="fas fa-eye me-1"></i>
+
+                                    View
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                        <!-- ==========================================
+                             VIEW SUPPORT REQUEST
+                        =========================================== -->
+
+                        <div
+
+                            class="modal fade"
+
+                            id="requestModal{{ support[0] }}"
+
+                            tabindex="-1">
+
+                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+
+                                        <h5 class="modal-title">
+
+                                            <i class="fas fa-headset me-2"></i>
+
+                                            Support Ticket Details
+
+                                        </h5>
+
+                                        <button
+
+                                            type="button"
+
+                                            class="btn-close"
+
+                                            data-bs-dismiss="modal">
+
+                                        </button>
+
+                                    </div>
+
+                                    <div class="modal-body">
+
+                                        <div class="mb-4">
+
+                                            <div class="section-title">
+
+                                                Subject
+
+                                            </div>
+
+                                            <div class="message-box">
+
+                                                {{ support[1] }}
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="mb-4">
+
+                                            <div class="section-title">
+
+                                                Your Message
+
+                                            </div>
+
+                                            <div class="message-box">
+
+                                                {{ support[2] }}
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="mb-4">
+
+                                            <div class="section-title">
+
+                                                Administrator Reply
+
+                                            </div>
+
+                                            <div class="reply-box">
+
+                                                {% if support[3] %}
+
+                                                    {{ support[3] }}
+
+                                                {% else %}
+
+                                                    <em class="text-muted">
+
+                                                        No reply yet.
+
+                                                    </em>
+
+                                                {% endif %}
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="info-card">
+
+                                            <div class="row">
+
+                                                <div class="col-md-4">
+
+                                                    <strong>
+
+                                                        Status
+
+                                                    </strong>
+
+                                                    <br><br>
+
+                                                    {% if support[4] == "Resolved" %}
+
+                                                        <span class="badge bg-success">
+
+                                                            Resolved
+
+                                                        </span>
+
+                                                    {% else %}
+
+                                                        <span class="badge bg-warning text-dark">
+
+                                                            Pending
+
+                                                        </span>
+
+                                                    {% endif %}
+
+                                                </div>
+
+                                                <div class="col-md-4">
+
+                                                    <strong>
+
+                                                        Submitted
+
+                                                    </strong>
+
+                                                    <br><br>
+
+                                                    {{ support[5].strftime('%d %B %Y %I:%M %p') }}
+
+                                                </div>
+
+                                                <div class="col-md-4">
+
+                                                    <strong>
+
+                                                        Resolved
+
+                                                    </strong>
+
+                                                    <br><br>
+
+                                                    {% if support[6] %}
+
+                                                        {{ support[6].strftime('%d %B %Y %I:%M %p') }}
+
+                                                    {% else %}
+
+                                                        -
+
+                                                    {% endif %}
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+
+                                        <button
+
+                                            class="btn btn-secondary"
+
+                                            data-bs-dismiss="modal">
+
+                                            Close
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+                        {% else %}
+
+            <!-- ==========================================
+                 NO SUPPORT REQUESTS
+            =========================================== -->
+
+            <div class="empty-state">
+
+                <i class="fas fa-inbox"></i>
+
+                <h4>
+
+                    No Support Requests Yet
+
+                </h4>
+
+                <p>
+
+                    You have not submitted any support requests.
+
+                </p>
+
+                <a
+
+                    href="{{ url_for('contact_admin') }}"
+
+                    class="btn btn-success btn-new mt-3">
+
+                    <i class="fas fa-plus-circle me-2"></i>
+
+                    Submit Your First Request
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     BOOTSTRAP JS
+========================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- ==========================================
+     AUTO CLOSE ALERTS
+========================================== -->
+
+<script>
+
+setTimeout(function(){
+
+    document.querySelectorAll(".alert").forEach(function(alert){
+
+        bootstrap.Alert.getOrCreateInstance(alert).close();
+
+    });
+
+},3000);
+
+</script>
+
+</body>
+
+</html>

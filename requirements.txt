@@ -1,0 +1,7 @@
+Flask==3.0.3
+Flask-MySQLdb==2.0.0
+Werkzeug==3.0.3
+mysqlclient==2.2.4
+reportlab==4.2.2
+Pillow==10.4.0
+gunicorn==22.0.0

@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Career Recommendation Report</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+
+<style>
+
+body{
+
+    background:#f5f7fb;
+
+    font-family:Segoe UI,Tahoma,sans-serif;
+
+    transition:.3s;
+
+}
+
+/* ================= DARK MODE ================= */
+
+body.dark{
+
+    background:#121212;
+
+    color:#f5f5f5;
+
+}
+
+.navbar{
+
+    background:#23408e;
+
+}
+
+.navbar-brand{
+
+    color:white !important;
+
+    font-weight:bold;
+
+}
+
+.card{
+
+    border:none;
+
+    border-radius:18px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+body.dark .card{
+
+    background:#1f1f1f;
+
+    color:#ffffff;
+
+}
+
+.best-match{
+
+    border:2px solid #198754;
+
+}
+
+.summary{
+
+    background:#eefaf3;
+
+    border-left:5px solid #198754;
+
+    padding:20px;
+
+    border-radius:12px;
+
+}
+
+body.dark .summary{
+
+    background:#233327;
+
+    color:#ffffff;
+
+}
+
+.progress{
+
+    height:25px;
+
+    border-radius:20px;
+
+}
+
+body.dark .progress{
+
+    background:#444;
+
+}
+
+.progress-bar{
+
+    font-weight:bold;
+
+}
+
+.info-box{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    margin-top:20px;
+
+    border-left:4px solid #23408e;
+
+}
+
+body.dark .info-box{
+
+    background:#2b2b2b;
+
+    color:#ffffff;
+
+    border-left:4px solid #4d8dff;
+
+}
+
+.section-title{
+
+    color:#23408e;
+
+    font-weight:bold;
+
+}
+
+body.dark .section-title{
+
+    color:#8db7ff;
+
+}
+
+body.dark .text-muted{
+
+    color:#cfcfcf !important;
+
+}
+
+body.dark .accordion-item{
+
+    background:#1f1f1f;
+
+    border-color:#444;
+
+}
+
+body.dark .accordion-button{
+
+    background:#2b2b2b;
+
+    color:#ffffff;
+
+}
+
+body.dark .accordion-button:not(.collapsed){
+
+    background:#23408e;
+
+    color:#ffffff;
+
+}
+
+body.dark .accordion-body{
+
+    background:#1f1f1f;
+
+    color:#ffffff;
+
+}
+
+body.dark .accordion-body p,
+
+body.dark .accordion-body strong,
+
+body.dark .accordion-body label,
+
+body.dark .accordion-body h6{
+
+    color:#ffffff !important;
+
+}
+
+.footer{
+
+    text-align:center;
+
+    color:gray;
+
+    margin:40px;
+
+}
+
+body.dark .footer{
+
+    color:#cccccc;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark">
+
+<div class="container">
+
+<span class="navbar-brand">
+
+<i class="fas fa-graduation-cap"></i>
+
+Career Recommendation System
+
+</span>
+
+<div>
+
+<button
+class="btn btn-outline-light me-2"
+onclick="toggleDarkMode()">
+
+<i class="fas fa-moon"></i>
+
+</button>
+
+<a href="{{ url_for('dashboard') }}"
+class="btn btn-light">
+
+Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+</nav>
+
+<div class="container mt-4">
+
+<h2 class="text-center">
+
+<i class="fas fa-chart-line"></i>
+
+Career Recommendation Report
+
+</h2>
+
+<p class="text-center text-muted">
+
+Prepared for
+
+<strong>
+
+{{ session.full_name }}
+
+</strong>
+
+</p>
+
+{% if recommendations %}
+
+<div class="summary mt-4">
+
+<h4>
+
+🏆 Congratulations!
+
+</h4>
+
+<p>
+
+Based on your assessment results,
+
+<strong>
+
+{{ recommendations[0].career }}
+
+</strong>
+
+is your strongest career recommendation.
+
+<br>
+
+Match Percentage:
+
+<strong>
+
+{{ recommendations[0].score }}%
+
+</strong>
+
+<br>
+
+Confidence Level:
+
+<strong>
+
+{{ recommendations[0].confidence }}%
+
+</strong>
+
+</p>
+
+</div>
+
+<!-- ================= BEST MATCH ================= -->
+
+<div class="card best-match p-4 mt-4">
+
+<h3 class="text-success">
+
+🏆 Best Career Match
+
+</h3>
+
+<h2>
+
+{{ recommendations[0].career }}
+
+</h2>
+
+<p class="text-primary fw-bold">
+
+{{ recommendations[0].career_field }}
+
+</p>
+
+<div class="row mt-4">
+
+<div class="col-md-4">
+
+<label class="fw-bold">
+
+Match Percentage
+
+</label>
+
+<div class="progress">
+
+<div class="progress-bar bg-success"
+
+style="width:{{ recommendations[0].score }}%">
+
+{{ recommendations[0].score }}%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<label class="fw-bold">
+
+Confidence
+
+</label>
+
+<div class="progress">
+
+<div class="progress-bar bg-primary"
+
+style="width:{{ recommendations[0].confidence }}%">
+
+{{ recommendations[0].confidence }}%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<label class="fw-bold">
+
+Career Readiness
+
+</label>
+
+<br>
+
+<span class="badge bg-success fs-6">
+
+{{ recommendations[0].readiness }}
+
+</span>
+
+</div>
+
+</div>
+
+<!-- ================= ASSESSMENT BREAKDOWN ================= -->
+
+<div class="info-box">
+
+<h5 class="section-title">
+
+<i class="fas fa-chart-pie"></i>
+
+Assessment Breakdown
+
+</h5>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<strong>
+
+Technical Skills
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-primary"
+
+style="width:{{ recommendations[0].technical }}%">
+
+{{ recommendations[0].technical }}%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<strong>
+
+Interests
+
+</strong>
+
+<div class="progress mt-2">
+
+<div class="progress-bar bg-success"
+
+style="width:{{ recommendations[0].interest }}%">
+
+{{ recommendations[0].interest }}%
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= CAREER DESCRIPTION ================= -->
+
+<div class="info-box">
+
+<h5 class="section-title">
+
+<i class="fas fa-book-open"></i>
+
+Career Description
+
+</h5>
+
+<p>
+
+{{ recommendations[0].description }}
+
+</p>
+
+</div>
+
+<!-- ================= WHY IT FITS ================= -->
+
+<div class="info-box">
+
+<h5 class="section-title">
+
+<i class="fas fa-heart"></i>
+
+Why This Career Fits You
+
+</h5>
+
+<p>
+
+{{ recommendations[0].why_fits }}
+
+</p>
+
+</div>
+
+<!-- ================= RESPONSIBILITIES ================= -->
+
+{% if recommendations[0].daily_responsibilities %}
+
+<div class="info-box">
+
+<h5 class="section-title">
+
+<i class="fas fa-tasks"></i>
+
+Daily Responsibilities
+
+</h5>
+
+<p>
+
+{{ recommendations[0].daily_responsibilities }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+<!-- ================= REQUIRED SKILLS ================= -->
+
+{% if recommendations[0].required_skills %}
+
+<div class="info-box">
+
+<h5 class="section-title">
+
+<i class="fas fa-code"></i>
+
+Required Skills
+
+</h5>
+
+<p>
+
+{{ recommendations[0].required_skills }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+<!-- ================= PERSONALITY ================= -->
+
+{% if recommendations[0].recommended_personality %}
+
+<div class="info-box">
+
+<h5 class="section-title">
+
+<i class="fas fa-user"></i>
+
+Recommended Personality
+
+</h5>
+
+<p>
+
+{{ recommendations[0].recommended_personality }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+<!-- ================= IMPROVEMENT ================= -->
+
+{% if recommendations[0].activities_to_improve %}
+
+<div class="info-box">
+
+<h5 class="section-title">
+
+<i class="fas fa-arrow-trend-up"></i>
+
+Activities To Improve
+
+</h5>
+
+<p>
+
+{{ recommendations[0].activities_to_improve }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+<!-- ================= CERTIFICATIONS ================= -->
+
+{% if recommendations[0].certifications %}
+
+<div class="info-box">
+
+<h5 class="section-title">
+
+<i class="fas fa-certificate"></i>
+
+Recommended Certifications
+
+</h5>
+
+<p>
+
+{{ recommendations[0].certifications }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+<!-- ================= LEARNING PLATFORMS ================= -->
+
+{% if recommendations[0].learning_platforms %}
+
+<div class="info-box">
+
+<h5 class="section-title">
+
+<i class="fas fa-laptop-code"></i>
+
+Learning Platforms
+
+</h5>
+
+<p>
+
+{{ recommendations[0].learning_platforms }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+<!-- ================= DID YOU KNOW ================= -->
+
+{% if recommendations[0].did_you_know %}
+
+<div class="alert alert-warning mt-4">
+
+<h5>
+
+<i class="fas fa-lightbulb"></i>
+
+Did You Know?
+
+</h5>
+
+<p class="mb-0">
+
+{{ recommendations[0].did_you_know }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+<!-- ================= OTHER RECOMMENDATIONS ================= -->
+ <h3 class="mt-5 mb-3">
+
+<i class="fas fa-list-check"></i>
+
+Other Recommended Careers
+
+</h3>
+
+<div class="accordion" id="careerAccordion">
+
+{% for recommendation in recommendations[1:] %}
+
+<div class="accordion-item mb-3">
+
+<h2 class="accordion-header" id="heading{{ loop.index }}">
+
+<button
+
+class="accordion-button collapsed"
+
+type="button"
+
+data-bs-toggle="collapse"
+
+data-bs-target="#collapse{{ loop.index }}">
+
+<strong>
+
+{{ recommendation.career }}
+
+</strong>
+
+&nbsp;&nbsp;
+
+<span class="badge bg-success">
+
+{{ recommendation.score }}%
+
+</span>
+
+</button>
+
+</h2>
+
+<div
+
+id="collapse{{ loop.index }}"
+
+class="accordion-collapse collapse"
+
+data-bs-parent="#careerAccordion">
+
+<div class="accordion-body">
+
+<p class="text-primary fw-bold">
+
+{{ recommendation.career_field }}
+
+</p>
+
+<div class="mb-3">
+
+<label class="fw-bold">
+
+Match Percentage
+
+</label>
+
+<div class="progress">
+
+<div
+
+class="progress-bar bg-success"
+
+style="width:{{ recommendation.score }}%">
+
+{{ recommendation.score }}%
+
+</div>
+
+</div>
+
+</div>
+
+<div class="info-box">
+
+<h6 class="section-title">
+
+Career Description
+
+</h6>
+
+<p>
+
+{{ recommendation.description }}
+
+</p>
+
+</div>
+
+<div class="info-box">
+
+<h6 class="section-title">
+
+Why This Career Fits You
+
+</h6>
+
+<p>
+
+{{ recommendation.why_fits }}
+
+</p>
+
+</div>
+
+{% if recommendation.daily_responsibilities %}
+
+<div class="info-box">
+
+<h6 class="section-title">
+
+Daily Responsibilities
+
+</h6>
+
+<p>
+
+{{ recommendation.daily_responsibilities }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+{% if recommendation.required_skills %}
+
+<div class="info-box">
+
+<h6 class="section-title">
+
+Required Skills
+
+</h6>
+
+<p>
+
+{{ recommendation.required_skills }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+{% if recommendation.certifications %}
+
+<div class="info-box">
+
+<h6 class="section-title">
+
+Certifications
+
+</h6>
+
+<p>
+
+{{ recommendation.certifications }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+{% if recommendation.learning_platforms %}
+
+<div class="info-box">
+
+<h6 class="section-title">
+
+Learning Platforms
+
+</h6>
+
+<p>
+
+{{ recommendation.learning_platforms }}
+
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<!-- ================= ACTION BUTTONS ================= -->
+
+<div class="text-center mt-5 mb-5">
+
+<a href="{{ url_for('dashboard') }}"
+
+class="btn btn-primary me-2">
+
+<i class="fas fa-home"></i>
+
+Dashboard
+
+</a>
+
+<a href="{{ url_for('skills_assessment') }}"
+
+class="btn btn-outline-primary me-2">
+
+<i class="fas fa-rotate"></i>
+
+Retake Assessment
+
+</a>
+
+<a href="{{ url_for('download_pdf') }}"
+
+class="btn btn-danger">
+
+<i class="fas fa-file-pdf"></i>
+
+Download PDF
+
+</a>
+
+</div>
+
+{% else %}
+
+<div class="alert alert-danger text-center mt-5">
+
+<h4>
+
+No Recommendation Available
+
+</h4>
+
+<p>
+
+Please complete all assessments to receive your career recommendations.
+
+</p>
+
+<a href="{{ url_for('skills_assessment') }}"
+
+class="btn btn-primary">
+
+Start Assessment
+
+</a>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<div class="footer">
+
+Career Recommendation System © 2026
+
+</div>
+
+<script>
+
+function toggleDarkMode(){
+
+document.body.classList.toggle("dark");
+
+if(document.body.classList.contains("dark")){
+
+localStorage.setItem("theme","dark");
+
+}else{
+
+localStorage.setItem("theme","light");
+
+}
+
+}
+
+window.onload=function(){
+
+if(localStorage.getItem("theme")=="dark"){
+
+document.body.classList.add("dark");
+
+}
+
+}
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

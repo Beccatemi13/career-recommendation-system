@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Assessment Details
+
+</title>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+
+body{
+
+    background:#f4f7fc;
+
+    font-family:Segoe UI,sans-serif;
+
+}
+
+.top-bar{
+
+    background:#23408e;
+
+    color:white;
+
+    padding:20px 30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.top-bar h3{
+
+    margin:0;
+
+    font-weight:700;
+
+}
+
+.page{
+
+    max-width:1100px;
+
+    margin:35px auto;
+
+    padding:0 20px;
+
+}
+
+.card{
+
+    border:none;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+.card-header{
+
+    background:#23408e;
+
+    color:white;
+
+    padding:22px;
+
+}
+
+.card-header h4{
+
+    margin:0;
+
+    font-weight:700;
+
+}
+
+.card-body{
+
+    padding:35px;
+
+}
+
+.section-title{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#23408e;
+
+    margin-bottom:15px;
+
+}
+
+.info-box{
+
+    background:#f8f9fa;
+
+    border:1px solid #dee2e6;
+
+    border-radius:12px;
+
+    padding:18px;
+
+    margin-bottom:30px;
+
+}
+
+.info-box strong{
+
+    color:#23408e;
+
+}
+
+.table{
+
+    margin-bottom:30px;
+
+}
+
+.table th{
+
+    width:45%;
+
+    background:#f8f9fa;
+
+}
+
+.badge-score{
+
+    background:#23408e;
+
+    color:white;
+
+    font-size:15px;
+
+    padding:8px 18px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="top-bar">
+
+<h3>
+
+<i class="fas fa-file-alt me-2"></i>
+
+Assessment Details
+
+</h3>
+
+<a
+
+href="{{ url_for('admin_assessments') }}"
+
+class="btn btn-light">
+
+<i class="fas fa-arrow-left me-2"></i>
+
+Back
+
+</a>
+
+</div>
+
+<div class="page">
+
+<div class="card">
+
+<div class="card-header">
+
+<h4>
+
+Student Assessment Record
+
+</h4>
+
+</div>
+
+<div class="card-body">
+
+<div class="section-title">
+
+Student Information
+
+</div>
+
+<div class="info-box">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<strong>
+
+Full Name
+
+</strong>
+
+<br>
+
+{{ assessment.full_name }}
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<strong>
+
+Email
+
+</strong>
+
+<br>
+
+{{ assessment.email }}
+
+</div>
+
+<div class="col-md-6">
+
+<strong>
+
+Department
+
+</strong>
+
+<br>
+
+{{ assessment.department }}
+
+</div>
+
+<div class="col-md-6">
+
+<strong>
+
+Level
+
+</strong>
+
+<br>
+
+{{ assessment.level }}
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ==========================================================
+     ACADEMIC & SOFT SKILLS
+========================================================== -->
+
+<div class="section-title">
+
+Academic & Soft Skills
+
+</div>
+
+<table class="table table-bordered">
+
+<tr>
+
+<th>
+
+Programming
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.programming }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Mathematics
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.mathematics }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Communication
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.communication }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Leadership
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.leadership }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Creativity
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.creativity }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Problem Solving
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.problem_solving }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Teamwork
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.teamwork }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+</table>
+
+<!-- ==========================================================
+     INTERESTS & PERSONALITY
+========================================================== -->
+
+<div class="section-title">
+
+Interests & Personality
+
+</div>
+
+<table class="table table-bordered">
+
+<tr>
+
+<th>
+
+Technology Interest
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.technology_interest }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Business Interest
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.business_interest }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Healthcare Interest
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.healthcare_interest }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Analytical Thinking
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.analytical_thinking }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Research Interest
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.research_interest }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Public Speaking
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.public_speaking }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Entrepreneurship
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.entrepreneurship }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Attention to Detail
+
+</th>
+
+<td>
+
+<span class="badge badge-score">
+
+{{ assessment.attention_to_detail }}/5
+
+</span>
+
+</td>
+
+</tr>
+
+</table>
+
+<!-- ==========================================================
+     RECOMMENDATION
+========================================================== -->
+
+<div class="section-title">
+
+Recommendation Summary
+
+</div>
+
+<div class="info-box">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<strong>
+
+Overall Score
+
+</strong>
+
+<br><br>
+
+<span class="badge bg-primary fs-6">
+
+{{ assessment.overall_score }}
+
+</span>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<strong>
+
+Top Career
+
+</strong>
+
+<br><br>
+
+{{ assessment.top_career }}
+
+</div>
+
+<div class="col-md-6">
+
+<strong>
+
+Final Recommendation
+
+</strong>
+
+<br><br>
+
+{{ assessment.recommendation }}
+
+</div>
+
+<div class="col-md-6">
+
+<strong>
+
+Assessment Date
+
+</strong>
+
+<br><br>
+
+{{ assessment.assessment_date.strftime('%d %B %Y %I:%M %p') }}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================================
+     BOOTSTRAP JAVASCRIPT
+========================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ==========================================================
+     AUTO CLOSE ALERTS
+========================================================== -->
+
+<script>
+
+setTimeout(function(){
+
+    document.querySelectorAll(".alert").forEach(function(alert){
+
+        bootstrap.Alert.getOrCreateInstance(alert).close();
+
+    });
+
+},3000);
+
+</script>
+
+</body>
+
+</html>
+

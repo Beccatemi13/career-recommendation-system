@@ -1,0 +1,280 @@
+body{
+
+background:#f4f7fc;
+font-family:Arial,Helvetica,sans-serif;
+
+}
+
+/* ==========================
+SIDEBAR
+========================== */
+
+.sidebar{
+
+position:fixed;
+
+left:0;
+
+top:0;
+
+width:260px;
+
+height:100vh;
+
+background:#23408e;
+
+overflow-y:auto;
+
+padding-top:25px;
+
+box-shadow:5px 0 15px rgba(0,0,0,.08);
+
+}
+
+.sidebar h3{
+
+color:white;
+
+text-align:center;
+
+font-weight:bold;
+
+margin-bottom:35px;
+
+}
+
+.sidebar a{
+
+display:block;
+
+padding:16px 30px;
+
+color:white;
+
+text-decoration:none;
+
+transition:.3s;
+
+font-size:16px;
+
+}
+
+.sidebar a i{
+
+width:25px;
+
+}
+
+.sidebar a:hover{
+
+background:white;
+
+color:#23408e;
+
+padding-left:40px;
+
+}
+
+/* ==========================
+MAIN CONTENT
+========================== */
+
+.main{
+
+margin-left:260px;
+
+padding:35px;
+
+}
+
+/* ==========================
+TOPBAR
+========================== */
+/* ==========================
+TOPBAR
+========================== */
+
+.topbar{
+
+    background:#1f1f1f;
+
+    color:#ffffff;
+
+    border-radius:18px;
+
+    padding:20px 30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+
+    margin-bottom:30px;
+
+}
+
+/* Topbar text */
+
+.topbar h3{
+
+    color:#ffffff;
+
+    margin-bottom:3px;
+
+}
+
+.topbar p,
+
+.topbar .text-muted{
+
+    color:#d6d6d6 !important;
+
+}
+
+/* Admin profile */
+
+.admin-profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.admin-profile img{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:50%;
+
+    border:2px solid #4e74da;
+
+}
+
+.admin-profile strong{
+
+    color:#ffffff;
+
+}
+
+.admin-profile small,
+
+.admin-profile .text-muted{
+
+    color:#d6d6d6 !important;
+
+}
+
+
+/* ==========================
+WELCOME
+========================== */
+
+.welcome{
+
+background:linear-gradient(135deg,#23408e,#4e74da);
+
+border-radius:20px;
+
+padding:40px;
+
+color:white;
+
+margin-bottom:35px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+
+}
+
+.welcome h2{
+
+font-weight:bold;
+
+margin-bottom:10px;
+
+}
+
+.welcome p{
+
+font-size:18px;
+
+opacity:.95;
+
+}
+
+/* ==========================
+CARDS
+========================== */
+
+.card{
+
+border:none;
+
+border-radius:18px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.stat-card{
+
+transition:.3s;
+
+}
+
+.stat-card:hover{
+
+transform:translateY(-8px);
+
+}
+
+.stat-card i{
+
+font-size:45px;
+
+margin-bottom:15px;
+
+}
+
+.table{
+
+margin-bottom:0;
+
+}
+
+footer{
+
+margin-top:50px;
+
+text-align:center;
+
+color:gray;
+
+}
+
+.table td,
+.table th{
+    vertical-align: middle;
+}
+
+.table td{
+    white-space: nowrap;
+}
+
+.table img{
+    width:50px;
+    height:50px;
+    object-fit:cover;
+    border-radius:50%;
+}
+
+.table{
+    margin-bottom:0;
+}

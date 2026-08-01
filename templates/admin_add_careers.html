@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Add Career</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/theme.css') }}">
+<style>
+
+body{
+    background:#f5f7fb;
+}
+
+.card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.section-title{
+    color:#23408e;
+    margin-top:30px;
+    margin-bottom:20px;
+}
+
+</style>
+
+</head>
+
+<body class="{% if session.get('theme') == 'dark' %}dark-mode{% endif %}">
+
+<div class="container mt-5 mb-5">
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+
+        {% for category, message in messages %}
+
+        <div class="alert alert-{{ category }} alert-dismissible fade show mt-3">
+
+            {{ message }}
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+            </button>
+
+        </div>
+
+        {% endfor %}
+
+    {% endif %}
+{% endwith %}
+
+<div class="card">
+
+<div class="card-body p-5">
+
+<h2 class="text-primary mb-4">
+
+Add New Career
+
+</h2>
+
+<form method="POST">
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Career Name
+
+</label>
+
+<input
+type="text"
+name="career_name"
+class="form-control"
+required>
+
+</div>
+
+<div class="mb-4">
+
+<label class="form-label">
+
+Description
+
+</label>
+
+<textarea
+name="description"
+class="form-control"
+rows="4"
+required></textarea>
+
+</div>
+
+<hr>
+
+<h4 class="section-title">
+
+Technical Skills
+
+</h4>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>Programming</label>
+
+<select class="form-select" name="programming" required>
+
+<option value="">Select</option>
+<option value="1">Not Required</option>
+<option value="2">Basic Requirement</option>
+<option value="3">Moderately Required</option>
+<option value="4">Highly Required</option>
+<option value="5">Essential</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Mathematics</label>
+
+<select class="form-select" name="mathematics" required>
+
+<option value="">Select</option>
+<option value="1">Not Required</option>
+<option value="2">Basic Requirement</option>
+<option value="3">Moderately Required</option>
+<option value="4">Highly Required</option>
+<option value="5">Essential</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Problem Solving</label>
+
+<select class="form-select" name="problem_solving" required>
+
+<option value="">Select</option>
+<option value="1">Not Required</option>
+<option value="2">Basic Requirement</option>
+<option value="3">Moderately Required</option>
+<option value="4">Highly Required</option>
+<option value="5">Essential</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Analytical Thinking</label>
+
+<select class="form-select" name="analytical_thinking" required>
+
+<option value="">Select</option>
+<option value="1">Not Required</option>
+<option value="2">Basic Requirement</option>
+<option value="3">Moderately Required</option>
+<option value="4">Highly Required</option>
+<option value="5">Essential</option>
+
+</select>
+
+</div>
+
+</div>
+
+<hr>
+
+<h4 class="section-title">
+
+Personal Skills
+
+</h4>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>Communication</label>
+
+<select class="form-select" name="communication" required>
+
+<option value="">Select</option>
+<option value="1">Not Important</option>
+<option value="2">Slightly Important</option>
+<option value="3">Moderately Important</option>
+<option value="4">Very Important</option>
+<option value="5">Essential</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Leadership</label>
+
+<select class="form-select" name="leadership" required>
+
+<option value="">Select</option>
+<option value="1">Not Important</option>
+<option value="2">Slightly Important</option>
+<option value="3">Moderately Important</option>
+<option value="4">Very Important</option>
+<option value="5">Essential</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Creativity</label>
+
+<select class="form-select" name="creativity" required>
+
+<option value="">Select</option>
+<option value="1">Not Important</option>
+<option value="2">Slightly Important</option>
+<option value="3">Moderately Important</option>
+<option value="4">Very Important</option>
+<option value="5">Essential</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Teamwork</label>
+
+<select class="form-select" name="teamwork" required>
+
+<option value="">Select</option>
+<option value="1">Not Important</option>
+<option value="2">Slightly Important</option>
+<option value="3">Moderately Important</option>
+<option value="4">Very Important</option>
+<option value="5">Essential</option>
+
+</select>
+
+</div>
+
+<hr>
+
+<h4 class="section-title">
+
+Career Interests
+
+</h4>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>Technology Interest</label>
+
+<select class="form-select" name="technology_interest" required>
+
+<option value="">Select</option>
+<option value="1">Very Low</option>
+<option value="2">Low</option>
+<option value="3">Moderate</option>
+<option value="4">High</option>
+<option value="5">Very High</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Business Interest</label>
+
+<select class="form-select" name="business_interest" required>
+
+<option value="">Select</option>
+<option value="1">Very Low</option>
+<option value="2">Low</option>
+<option value="3">Moderate</option>
+<option value="4">High</option>
+<option value="5">Very High</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Healthcare Interest</label>
+
+<select class="form-select" name="healthcare_interest" required>
+
+<option value="">Select</option>
+<option value="1">Very Low</option>
+<option value="2">Low</option>
+<option value="3">Moderate</option>
+<option value="4">High</option>
+<option value="5">Very High</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Research Interest</label>
+
+<select class="form-select" name="research_interest" required>
+
+<option value="">Select</option>
+<option value="1">Very Low</option>
+<option value="2">Low</option>
+<option value="3">Moderate</option>
+<option value="4">High</option>
+<option value="5">Very High</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Public Speaking</label>
+
+<select class="form-select" name="public_speaking" required>
+
+<option value="">Select</option>
+<option value="1">Very Low</option>
+<option value="2">Low</option>
+<option value="3">Moderate</option>
+<option value="4">High</option>
+<option value="5">Very High</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Entrepreneurship</label>
+
+<select class="form-select" name="entrepreneurship" required>
+
+<option value="">Select</option>
+<option value="1">Very Low</option>
+<option value="2">Low</option>
+<option value="3">Moderate</option>
+<option value="4">High</option>
+<option value="5">Very High</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Attention to Detail</label>
+
+<select class="form-select" name="attention_to_detail" required>
+
+<option value="">Select</option>
+<option value="1">Very Low</option>
+<option value="2">Low</option>
+<option value="3">Moderate</option>
+<option value="4">High</option>
+<option value="5">Very High</option>
+
+</select>
+
+</div>
+
+</div>
+
+<hr>
+
+<h4 class="section-title">
+
+Career Information
+
+</h4>
+
+<div class="mb-3">
+
+<label>Certifications</label>
+
+<textarea
+class="form-control"
+name="certifications"
+rows="2"
+placeholder="Example: AWS Certified Cloud Practitioner, Cisco CCNA"></textarea>
+
+</div>
+
+<div class="mb-3">
+
+<label>Learning Platforms</label>
+
+<textarea
+class="form-control"
+name="learning_platforms"
+rows="2"
+placeholder="Example: Coursera, Udemy, freeCodeCamp"></textarea>
+
+</div>
+
+<div class="mb-3">
+
+<label>Skills to Improve</label>
+
+<textarea
+class="form-control"
+name="skills_to_improve"
+rows="2"
+placeholder="Example: Python, Data Analysis, Communication"></textarea>
+
+</div>
+
+<div class="mb-3">
+
+<label>Related Careers</label>
+
+<textarea
+class="form-control"
+name="related_careers"
+rows="2"
+placeholder="Example: Software Engineer, Data Scientist"></textarea>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>Salary Range</label>
+
+<input
+type="text"
+name="salary_range"
+class="form-control"
+placeholder="₦250,000 - ₦1,000,000/month">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Career Outlook</label>
+
+<select
+name="career_outlook"
+class="form-select"
+required>
+
+<option value="">Select</option>
+
+<option>Excellent</option>
+
+<option>Very Good</option>
+
+<option>Good</option>
+
+<option>Average</option>
+
+<option>Poor</option>
+
+</select>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="text-center">
+
+<button
+type="submit"
+class="btn btn-success btn-lg">
+
+<i class="fas fa-plus-circle"></i>
+
+Add Career
+
+</button>
+
+<a href= {{ url_for('admin_manage_careers') }}
+class="btn btn-secondary btn-lg">
+
+Cancel
+
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

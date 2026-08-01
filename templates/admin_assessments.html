@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Admin Assessments</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/theme.css') }}">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/admin.css') }}">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body class="{% if session.get('theme') == 'dark' %}dark-mode{% endif %}">
+
+<div class="sidebar">
+
+    <h3>Career Admin</h3>
+
+    <a href="{{ url_for('admin_dashboard') }}">
+        <i class="fas fa-home"></i> Dashboard
+    </a>
+
+    <a href="{{ url_for('admin_students') }}">
+        <i class="fas fa-user-graduate"></i> Students
+    </a>
+
+    <a href="{{ url_for('admin_manage_careers') }}">
+        <i class="fas fa-briefcase"></i> Manage Careers
+    </a>
+
+    <a href="{{ url_for('admin_assessments') }}" class="active">
+        <i class="fas fa-file-alt"></i> Assessments
+    </a>
+
+    <a href="{{ url_for('admin_recommendations') }}">
+        <i class="fas fa-robot"></i> Recommendations
+    </a>
+
+    <a href="{{ url_for('admin_analytics') }}">
+        <i class="fas fa-chart-line"></i> Analytics
+    </a>
+
+    <a href="{{ url_for('admin_settings') }}">
+        <i class="fas fa-cog"></i> Settings
+    </a>
+
+    <a href="{{ url_for('admin_logout') }}">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+
+</div>
+
+<div class="main">
+
+<div class="topbar">
+
+<h3>
+
+Assessment Records
+
+</h3>
+
+</div>
+
+<div class="card shadow border-0 rounded-4">
+
+<div class="card-header bg-primary text-white">
+
+<h4>
+
+<i class="fas fa-file-alt me-2"></i>
+
+Completed Assessments
+
+</h4>
+
+</div>
+
+<div class="card-body">
+
+<input
+type="text"
+class="form-control mb-4"
+id="searchInput"
+placeholder="Search student...">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead>
+
+<tr>
+
+<th>S/N</th>
+
+<th>Student</th>
+
+<th>Assessment Date</th>
+
+<th>Overall Score</th>
+
+<th>Top Career</th>
+
+<th>Recommendation</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="assessmentTable">
+
+{% for assessment in assessments %}
+
+<tr>
+
+<td>
+
+{{ loop.index }}
+
+</td>
+
+<td>
+
+{{ assessment.full_name }}
+
+</td>
+
+<td>
+
+{{ assessment.assessment_date }}
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+{{ assessment.overall_score }}
+
+</span>
+
+</td>
+
+<td>
+
+{{ assessment.top_career }}
+
+</td>
+
+<td>
+
+{{ assessment.recommendation }}
+
+</td>
+
+<td>
+
+<a
+href="{{ url_for('admin_view_assessment', assessment_id=assessment.id) }}"
+class="btn btn-info btn-sm">
+
+<i class="fas fa-eye"></i>
+
+View
+
+</a>
+
+<a
+href="{{ url_for('admin_delete_assessment', assessment_id=assessment.id) }}"
+class="btn btn-danger btn-sm"
+onclick="return confirm('Delete this assessment?')">
+
+<i class="fas fa-trash"></i>
+
+Delete
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("keyup", function(){
+
+let value = this.value.toLowerCase();
+
+let rows = document.querySelectorAll("#assessmentTable tr");
+
+rows.forEach(function(row){
+
+row.style.display = row.innerText.toLowerCase().includes(value)
+
+? ""
+
+: "none";
+
+});
+
+});
+
+</script>
+
+</body>
+
+</html>
+
