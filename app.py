@@ -15,8 +15,6 @@ from flask import (
     make_response
 )
 
-from flask_mysqldb import MySQL
-
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash
@@ -36,6 +34,7 @@ from reportlab.platypus import (
     Paragraph,
     Spacer
 )
+from flask_mysqldb import MySQL
 
 from reportlab.lib.styles import getSampleStyleSheet
 from MySQLdb.cursors import DictCursor
