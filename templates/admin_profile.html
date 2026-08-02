@@ -104,7 +104,7 @@ body{
 
 <img
 
-src="{{ url_for('static', filename='uploads/' + (admin.profile_picture or 'default.png')) }}"
+src="{{ get_profile_picture(student.profile_picture) }}"
 
 class="profile-img">
 

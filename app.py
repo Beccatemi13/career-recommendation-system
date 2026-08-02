@@ -686,6 +686,29 @@ def allowed_file(filename):
         filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
     )
 
+# ============================================================
+# PROFILE PICTURE HELPER
+# ============================================================
+
+def get_profile_picture(image):
+
+    if image and image.startswith("http"):
+        return image
+
+    if image:
+        return url_for(
+            "static",
+            filename=f"uploads/{image}"
+        )
+
+    return url_for(
+        "static",
+        filename="uploads/default.png"
+    )
+
+app.jinja_env.globals.update(
+    get_profile_picture=get_profile_picture
+)
 
 def login_required():
 

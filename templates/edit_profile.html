@@ -13,8 +13,7 @@
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/theme.css') }}">
+src="{{ get_profile_picture(student.profile_picture) }}"
 
 <style>
 body{
@@ -128,7 +127,7 @@ data-bs-dismiss="alert">
 
 <img
 
-src="{{ url_for('static', filename='uploads/' + student.profile_picture) }}"
+src="{{ get_profile_picture(student.profile_picture) }}"
 
 class="profile-img mb-4">
 

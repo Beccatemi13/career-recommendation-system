@@ -390,8 +390,7 @@ Registered Students
     <td>
 
         <img
-        src="{{ url_for('static', filename='uploads/' + (student.profile_picture if student.profile_picture else 'default.png')) }}"
-        width="50"
+        src="{{ get_profile_picture(student.profile_picture) }}"
         height="50"
         class="rounded-circle"
         style="object-fit:cover;">

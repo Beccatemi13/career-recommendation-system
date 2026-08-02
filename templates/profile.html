@@ -136,8 +136,7 @@ data-bs-dismiss="alert">
 <div class="col-lg-4 text-center">
 
 <img
-src="{{ url_for('static',
-filename='uploads/' + (student.profile_picture or 'default.png')) }}"
+src="{{ get_profile_picture(student.profile_picture) }}"
 class="profile-img">
 
 <h2 class="mt-4">

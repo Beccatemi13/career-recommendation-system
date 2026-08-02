@@ -96,7 +96,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 
 <img
 
-src="{{ student.profile_picture if student.profile_picture else url_for('static', filename='uploads/default.png') }}"
+src="{{ get_profile_picture(student.profile_picture) }}"
 
 class="profile-image">
 
