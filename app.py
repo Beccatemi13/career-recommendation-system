@@ -34,7 +34,7 @@ from reportlab.platypus import (
     Paragraph,
     Spacer
 )
-from flask_mysqldb import MySQL
+from flask_pymysql import MySQL
 
 from reportlab.lib.styles import getSampleStyleSheet
 from MySQLdb.cursors import DictCursor
