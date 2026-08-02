@@ -10,3 +10,7 @@ SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "career_recommendation_secret_key"
 )
+
+CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME")
+CLOUDINARY_API_KEY = os.environ.get("CLOUDINARY_API_KEY")
+CLOUDINARY_API_SECRET = os.environ.get("CLOUDINARY_API_SECRET")

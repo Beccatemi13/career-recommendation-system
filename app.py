@@ -45,11 +45,21 @@ import tempfile
 
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.colors import HexColor
+import cloudinary
+import cloudinary.uploader
+
 # ============================================================
 # FLASK CONFIGURATION
 # ============================================================
 
 app = Flask(__name__)
+
+cloudinary.config(
+    cloud_name=config.CLOUDINARY_CLOUD_NAME,
+    api_key=config.CLOUDINARY_API_KEY,
+    api_secret=config.CLOUDINARY_API_SECRET,
+    secure=True
+)
 
 app.secret_key = config.SECRET_KEY
 
@@ -2275,16 +2285,11 @@ def edit_profile():
 
             if file and file.filename != "" and allowed_file(file.filename):
 
-                filename = secure_filename(file.filename)
+                result = cloudinary.uploader.upload(file)
 
-                file.save(
-                    os.path.join(
-                        app.config["UPLOAD_FOLDER"],
-                        filename
-                    )
-                )
+                image_url = result["secure_url"]
 
-                profile_picture = filename
+                profile_picture = image_url
 
         cursor.execute("""
 
