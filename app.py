@@ -33,16 +33,18 @@ from datetime import datetime
 
 from reportlab.platypus import (
     SimpleDocTemplate,
-    Paragraph
+    Paragraph,
+    Spacer
 )
 
 from reportlab.lib.styles import getSampleStyleSheet
 from MySQLdb.cursors import DictCursor
 from flask import send_file
 from reportlab.platypus import SimpleDocTemplate, Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
 import tempfile
 
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.colors import HexColor
 # ============================================================
 # FLASK CONFIGURATION
 # ============================================================
@@ -3460,8 +3462,9 @@ def analytics():
 
     )
 
+
 # ============================================================
-# DOWNLOAD PDF REPORT
+# DOWNLOAD RECOMMENDATION PDF
 # ============================================================
 
 @app.route("/download_pdf")
@@ -3473,38 +3476,27 @@ def download_pdf():
 
         return redirect(url_for("login"))
 
+    student_id = session["user_id"]
+
     cursor = mysql.connection.cursor()
 
-    # Get latest assessment
+    # ============================================================
+    # GET STUDENT DETAILS
+    # ============================================================
+
     cursor.execute("""
 
-    SELECT
+        SELECT
+            full_name,
+            email,
+            department,
+            level
 
-    programming,
-    mathematics,
-    communication,
-    leadership,
-    creativity,
-    problem_solving,
-    teamwork,
-    technology_interest,
-    business_interest,
-    healthcare_interest,
-    analytical_thinking,
-    research_interest,
-    public_speaking,
-    entrepreneurship,
-    attention_to_detail
+        FROM students
 
-    FROM assessment
+        WHERE id = %s
 
-    WHERE student_id=%s
-
-    ORDER BY id DESC
-
-    LIMIT 1
-
-    """,(session["user_id"],))
+    """, (student_id,))
 
     student = cursor.fetchone()
 
@@ -3512,95 +3504,318 @@ def download_pdf():
 
         cursor.close()
 
-        flash("Please complete an assessment first.","warning")
+        flash("Student record not found.", "danger")
 
-        return redirect (url_for("skills_assessment"))
+        return redirect(url_for("dashboard"))
 
-    cursor.execute("SELECT * FROM careers")
+    # ============================================================
+    # GET SAVED RECOMMENDATIONS
+    # ============================================================
 
-    careers = cursor.fetchall()
+    cursor.execute("""
+
+        SELECT
+
+            r.match_percentage,
+
+            r.confidence,
+
+            r.rank_position,
+
+            c.career_name,
+
+            c.career_field,
+
+            c.description,
+
+            c.why_fits,
+
+            c.required_skills,
+
+            c.activities_to_improve,
+
+            c.certifications,
+
+            c.learning_platforms,
+
+            c.workplaces,
+
+            c.industries,
+
+            c.career_outlook,
+
+            c.minimum_qualification,
+
+            c.average_study_years,
+
+            c.salary_note,
+
+            c.did_you_know
+
+        FROM recommendations r
+
+        JOIN careers c
+
+        ON r.career_id = c.id
+
+        WHERE r.student_id = %s
+
+        ORDER BY r.rank_position ASC
+
+    """, (student_id,))
+
+    recommendations = cursor.fetchall()
 
     cursor.close()
 
-    recommendations = []
+    if not recommendations:
 
-    for career in careers:
+        flash("No recommendations available.", "warning")
 
-        score = 0
+        return redirect(url_for("recommendation"))
 
-        for i in range(15):
+    # ============================================================
+    # CREATE PDF
+    # ============================================================
 
-            difference = abs(student[i] - career[i+3])
+    buffer = BytesIO()
 
-            score += (5 - difference)
-
-        percentage = round((score / 75) * 100)
-
-        recommendations.append({
-
-            "career": career[1],
-            "percentage": percentage,
-            "description": career[2],
-            "salary": career[22],
-            "outlook": career[23],
-            "certifications": career[18],
-            "platforms": career[19]
-
-        })
-
-    recommendations.sort(
-
-        key=lambda x: x["percentage"],
-
-        reverse=True
-
-    )
-
-    recommendations = recommendations[:3]
+    doc = SimpleDocTemplate(buffer)
 
     styles = getSampleStyleSheet()
 
-    temp = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+    title_style = styles["Heading1"]
+    title_style.alignment = TA_CENTER
+    title_style.textColor = HexColor("#0d6efd")
 
-    doc = SimpleDocTemplate(temp.name)
+    heading_style = styles["Heading2"]
+
+    normal = styles["BodyText"]
 
     story = []
 
-    story.append(Paragraph("<b>CAREER RECOMMENDATION REPORT</b>", styles["Title"]))
+    # ============================================================
+    # TITLE
+    # ============================================================
 
-    story.append(Paragraph("<br/>", styles["Normal"]))
+    story.append(
+        Paragraph(
+            "Career Recommendation Report",
+            title_style
+        )
+    )
 
-    story.append(Paragraph(f"<b>Student:</b> {session['full_name']}", styles["Normal"]))
+    story.append(Spacer(1, 20))
 
-    story.append(Paragraph(f"<b>Email:</b> {session['email']}", styles["Normal"]))
+    # ============================================================
+    # STUDENT DETAILS
+    # ============================================================
 
-    story.append(Paragraph(f"<b>Department:</b> {session['department']}", styles["Normal"]))
+    story.append(
+        Paragraph(
+            "<b>Student Information</b>",
+            heading_style
+        )
+    )
 
-    story.append(Paragraph(f"<b>Level:</b> {session['level']}", styles["Normal"]))
+    story.append(
+        Paragraph(
+            f"<b>Name:</b> {student[0]}",
+            normal
+        )
+    )
 
-    story.append(Paragraph("<br/><b>TOP CAREER RECOMMENDATIONS</b>", styles["Heading2"]))
+    story.append(
+        Paragraph(
+            f"<b>Email:</b> {student[1]}",
+            normal
+        )
+    )
 
-    for i, career in enumerate(recommendations, start=1):
+    story.append(
+        Paragraph(
+            f"<b>Department:</b> {student[2]}",
+            normal
+        )
+    )
 
-        story.append(Paragraph(f"<br/><b>{i}. {career['career']}</b>", styles["Heading3"]))
+    story.append(
+        Paragraph(
+            f"<b>Level:</b> {student[3]}",
+            normal
+        )
+    )
 
-        story.append(Paragraph(f"Match Percentage: {career['percentage']}%", styles["Normal"]))
+    story.append(Spacer(1, 20))
 
-        story.append(Paragraph(f"Description: {career['description']}", styles["Normal"]))
+    # ============================================================
+    # RECOMMENDATIONS
+    # ============================================================
 
-        story.append(Paragraph(f"Salary Range: {career['salary']}", styles["Normal"]))
+    story.append(
+        Paragraph(
+            "<b>Top Career Recommendations</b>",
+            heading_style
+        )
+    )
 
-        story.append(Paragraph(f"Career Outlook: {career['outlook']}", styles["Normal"]))
+    story.append(Spacer(1, 10))
 
-        story.append(Paragraph(f"Recommended Certifications: {career['certifications']}", styles["Normal"]))
+    for rec in recommendations:
 
-        story.append(Paragraph(f"Learning Platforms: {career['platforms']}", styles["Normal"]))
+        (
+            match_percentage,
+            confidence,
+            rank,
+            career_name,
+            career_field,
+            description,
+            why_fits,
+            required_skills,
+            activities,
+            certifications,
+            platforms,
+            workplaces,
+            industries,
+            outlook,
+            qualification,
+            study_years,
+            salary,
+            fact
+        ) = rec
+
+        story.append(
+            Paragraph(
+                f"<b>{rank}. {career_name}</b>",
+                heading_style
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Career Field:</b> {career_field}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Match Percentage:</b> {match_percentage:.2f}%",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Confidence:</b> {confidence:.2f}%",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Description:</b> {description}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Why It Fits:</b> {why_fits}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Required Skills:</b> {required_skills}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Activities to Improve:</b> {activities}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Certifications:</b> {certifications}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Learning Platforms:</b> {platforms}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Workplaces:</b> {workplaces}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Industries:</b> {industries}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Career Outlook:</b> {outlook}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Minimum Qualification:</b> {qualification}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Average Study Years:</b> {study_years}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Salary Information:</b> {salary}",
+                normal
+            )
+        )
+
+        story.append(
+            Paragraph(
+                f"<b>Did You Know?</b> {fact}",
+                normal
+            )
+        )
+
+        story.append(Spacer(1, 20))
+
+    # ============================================================
+    # BUILD PDF
+    # ============================================================
 
     doc.build(story)
 
+    buffer.seek(0)
+
     return send_file(
 
-        temp.name,
+        buffer,
 
         as_attachment=True,
 
@@ -3609,6 +3824,7 @@ def download_pdf():
         mimetype="application/pdf"
 
     )
+
 
 # ============================================================
 # CONTACT ADMINISTRATOR
