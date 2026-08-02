@@ -4,6 +4,10 @@
 # Developed with Flask + MySQL
 # ============================================================
 
+# ============================================================
+# IMPORTS
+# ============================================================
+
 from flask import (
     Flask,
     render_template,
@@ -12,7 +16,8 @@ from flask import (
     url_for,
     flash,
     session,
-    make_response
+    make_response,
+    send_file
 )
 
 from werkzeug.security import (
@@ -23,27 +28,37 @@ from werkzeug.security import (
 from werkzeug.utils import secure_filename
 
 import os
+import tempfile
 from io import BytesIO
+from datetime import datetime
 
 import config
 
-from datetime import datetime
+# ============================================================
+# MySQLdb)
+# ============================================================
+
+from flask_mysqldb import MySQL
+from MySQLdb.cursors import DictCursor
+
+# ============================================================
+# PDF
+# ============================================================
 
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
     Spacer
 )
-from flask_pymysql import MySQL
 
 from reportlab.lib.styles import getSampleStyleSheet
-from MySQLdb.cursors import DictCursor
-from flask import send_file
-from reportlab.platypus import SimpleDocTemplate, Paragraph
-import tempfile
-
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.colors import HexColor
+
+# ============================================================
+# CLOUDINARY
+# ============================================================
+
 import cloudinary
 import cloudinary.uploader
 
