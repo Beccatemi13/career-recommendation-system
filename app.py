@@ -955,28 +955,22 @@ def admin_dashboard():
     cursor.execute("SELECT COUNT(*) FROM assessment")
     total_assessments = cursor.fetchone()[0]
 
-    total_recommendations = total_assessments
+    cursor.execute("SELECT COUNT(*) FROM recommendations")
+    total_recommendations = cursor.fetchone()[0]
 
     # --------------------------------------------------------
     # CAREER RECOMMENDATION CHART
     # --------------------------------------------------------
 
     cursor.execute("""
-
-        SELECT
-
-            recommendation,
-
-            COUNT(*) AS total
-
-        FROM assessment
-
-        WHERE recommendation IS NOT NULL
-
-        GROUP BY recommendation
-
-        ORDER BY total DESC
-
+    SELECT
+        careers.title,
+        COUNT(*) AS total
+    FROM recommendations
+    JOIN careers
+    ON recommendations.career_id = careers.id
+    GROUP BY careers.title
+    ORDER BY total DESC
     """)
 
     career_chart = cursor.fetchall()
@@ -1042,24 +1036,18 @@ def admin_dashboard():
     # --------------------------------------------------------
 
     cursor.execute("""
-
-        SELECT
-
-            students.full_name,
-            assessment.top_career,
-            assessment.overall_score,
-            assessment.assessment_date
-
-        FROM assessment
-
-        JOIN students
-
-        ON assessment.student_id = students.id
-
-        ORDER BY assessment.assessment_date DESC
-
-        LIMIT 5
-
+    SELECT
+        students.full_name,
+        careers.title,
+        recommendations.match_percentage,
+        recommendations.generated_at
+    FROM recommendations
+    JOIN students
+    ON recommendations.student_id = students.id
+    JOIN careers
+    ON recommendations.career_id = careers.id
+    ORDER BY recommendations.generated_at DESC
+    LIMIT 5
     """)
 
     recent_assessments = cursor.fetchall()
@@ -2940,6 +2928,37 @@ def recommendation():
         )
 
     student_id = session["user_id"]
+
+    cursor = mysql.connection.cursor()
+
+    # Check Skill Assessment
+    cursor.execute("""
+    SELECT COUNT(*)
+    FROM student_skill_assessment
+    WHERE student_id=%s
+    """, (student_id,))
+
+    skill_count = cursor.fetchone()[0]
+
+    # Check Interest Assessment
+    cursor.execute("""
+    SELECT COUNT(*)
+    FROM student_interest_assessment
+    WHERE student_id=%s
+    """, (student_id,))
+
+    interest_count = cursor.fetchone()[0]
+
+    if skill_count == 0 or interest_count == 0:
+
+        flash(
+            "Please complete your assessment first.",
+            "warning"
+        )
+
+        cursor.close()
+
+        return redirect(url_for("assessment"))
 
     cursor = mysql.connection.cursor()
 
