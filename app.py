@@ -1965,26 +1965,32 @@ def admin_recommendations():
 
         SELECT
 
-            assessment.id,
-            assessment.student_id,
-            assessment.overall_score,
-            assessment.top_career,
-            assessment.recommendation,
-            assessment.assessment_date,
+            recommendations.id,
+            recommendations.student_id,
+            recommendations.match_percentage,
+            recommendations.confidence,
+            recommendations.rank_position,
+            recommendations.generated_at,
+
+            careers.career_name,
 
             students.full_name,
             students.department,
             students.level
 
-        FROM assessment
+        FROM recommendations
 
         JOIN students
+        ON students.id = recommendations.student_id
 
-        ON students.id = assessment.student_id
+        JOIN careers
+        ON careers.id = recommendations.career_id
 
-        WHERE assessment.top_career IS NOT NULL
+        ORDER BY
 
-        ORDER BY assessment.assessment_date DESC
+            recommendations.generated_at DESC,
+            recommendations.student_id,
+            recommendations.rank_position
 
     """)
 
@@ -2958,7 +2964,7 @@ def recommendation():
 
         cursor.close()
 
-        return redirect(url_for("assessment"))
+        return redirect(url_for("skill_assessment"))
 
     cursor = mysql.connection.cursor()
 

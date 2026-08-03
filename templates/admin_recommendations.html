@@ -19,13 +19,13 @@ href="{{ url_for('static', filename='css/theme.css') }}">
 href="{{ url_for('static', filename='css/admin.css') }}">
 
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
 <body class="{% if session.get('theme') == 'dark' %}dark-mode{% endif %}">
 
-<!-- ========================= SIDEBAR ========================= -->
+<!-- ================= SIDEBAR ================= -->
 
 <div class="sidebar">
 
@@ -65,21 +65,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 </div>
 
-<!-- ========================= MAIN ========================= -->
+<!-- ================= MAIN ================= -->
 
 <div class="main">
 
 <div class="topbar">
 
-<h3>
-
-Generated Recommendations
-
-</h3>
+<h3>Generated Recommendations</h3>
 
 </div>
-
-<!-- Card -->
 
 <div class="card shadow border-0 rounded-4">
 
@@ -98,13 +92,9 @@ Student Career Recommendations
 <div class="card-body">
 
 <input
-
 type="text"
-
 class="form-control mb-4"
-
 id="searchInput"
-
 placeholder="Search student or career...">
 
 <div class="table-responsive">
@@ -115,7 +105,7 @@ placeholder="Search student or career...">
 
 <tr>
 
-<th>S/N</th>
+<th>#</th>
 
 <th>Student</th>
 
@@ -123,15 +113,19 @@ placeholder="Search student or career...">
 
 <th>Level</th>
 
-<th>Top Career</th>
+<th>Rank</th>
 
-<th>Score</th>
+<th>Career</th>
 
-<th>Recommendation</th>
+<th>Match %</th>
+
+<th>Confidence</th>
+
+<th>Status</th>
 
 <th>Date</th>
 
-<th>Actions</th>
+<th>Action</th>
 
 </tr>
 
@@ -143,23 +137,11 @@ placeholder="Search student or career...">
 
 <tr>
 
-<td>
+<td>{{ loop.index }}</td>
 
-{{ loop.index }}
+<td>{{ rec.full_name }}</td>
 
-</td>
-
-<td>
-
-{{ rec.full_name }}
-
-</td>
-
-<td>
-
-{{ rec.department }}
-
-</td>
+<td>{{ rec.department }}</td>
 
 <td>
 
@@ -173,9 +155,19 @@ placeholder="Search student or career...">
 
 <td>
 
+<span class="badge bg-dark">
+
+{{ rec.rank_position }}
+
+</span>
+
+</td>
+
+<td>
+
 <strong>
 
-{{ rec.top_career }}
+{{ rec.career_name }}
 
 </strong>
 
@@ -185,7 +177,7 @@ placeholder="Search student or career...">
 
 <span class="badge bg-success">
 
-{{ rec.overall_score }}%
+{{ "%.2f"|format(rec.match_percentage) }}%
 
 </span>
 
@@ -193,35 +185,53 @@ placeholder="Search student or career...">
 
 <td>
 
-{% if rec.recommendation == "Excellent Match" %}
+<span class="badge bg-info">
+
+{{ "%.2f"|format(rec.confidence) }}%
+
+</span>
+
+</td>
+
+<td>
+
+{% if rec.match_percentage >= 90 %}
 
 <span class="badge bg-success">
 
-{{ rec.recommendation }}
+Excellent Match
 
 </span>
 
-{% elif rec.recommendation == "Good Match" %}
+{% elif rec.match_percentage >= 80 %}
 
 <span class="badge bg-primary">
 
-{{ rec.recommendation }}
+Very Good Match
 
 </span>
 
-{% elif rec.recommendation == "Fair Match" %}
+{% elif rec.match_percentage >= 70 %}
+
+<span class="badge bg-info">
+
+Good Match
+
+</span>
+
+{% elif rec.match_percentage >= 60 %}
 
 <span class="badge bg-warning text-dark">
 
-{{ rec.recommendation }}
+Potential Match
 
 </span>
 
 {% else %}
 
-<span class="badge bg-danger">
+<span class="badge bg-secondary">
 
-{{ rec.recommendation }}
+Needs Improvement
 
 </span>
 
@@ -231,23 +241,11 @@ placeholder="Search student or career...">
 
 <td>
 
-{{ rec.assessment_date }}
+{{ rec.generated_at }}
 
 </td>
 
 <td>
-
-<a
-
-href="{{ url_for('admin_view_assessment', assessment_id=rec.id) }}"
-
-class="btn btn-info btn-sm">
-
-<i class="fas fa-eye"></i>
-
-View
-
-</a>
 
 <a
 
@@ -309,21 +307,21 @@ Final Year Project • 2026
 
 const searchInput = document.getElementById("searchInput");
 
-searchInput.addEventListener("keyup", function(){
+searchInput.addEventListener("keyup", function () {
 
-let value = this.value.toLowerCase();
+    let value = this.value.toLowerCase();
 
-let rows = document.querySelectorAll("#recommendationTable tr");
+    let rows = document.querySelectorAll("#recommendationTable tr");
 
-rows.forEach(function(row){
+    rows.forEach(function (row) {
 
-row.style.display = row.innerText.toLowerCase().includes(value)
+        row.style.display = row.innerText.toLowerCase().includes(value)
 
-? ""
+            ? ""
 
-: "none";
+            : "none";
 
-});
+    });
 
 });
 
