@@ -964,12 +964,12 @@ def admin_dashboard():
 
     cursor.execute("""
     SELECT
-        careers.name,
+        careers.career_name,
         COUNT(*) AS total
     FROM recommendations
     JOIN careers
     ON recommendations.career_id = careers.id
-    GROUP BY careers.name
+    GROUP BY careers.career_name
     ORDER BY total DESC
     """)
 
@@ -1038,7 +1038,7 @@ def admin_dashboard():
     cursor.execute("""
     SELECT
         students.full_name,
-        careers.name,
+        careers.career_name,
         recommendations.match_percentage,
         recommendations.generated_at
     FROM recommendations
