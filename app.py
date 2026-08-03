@@ -952,7 +952,14 @@ def admin_dashboard():
     cursor.execute("SELECT COUNT(*) FROM careers")
     total_careers = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT(*) FROM assessment")
+    cursor.execute("""
+
+    SELECT COUNT(DISTINCT student_id)
+
+    FROM student_skill_assessment
+
+    """)
+
     total_assessments = cursor.fetchone()[0]
 
     cursor.execute("SELECT COUNT(*) FROM recommendations")
@@ -971,6 +978,7 @@ def admin_dashboard():
     ON recommendations.career_id = careers.id
     GROUP BY careers.career_name
     ORDER BY total DESC
+    WHERE recommendations.rank_position = 1
     """)
 
     career_chart = cursor.fetchall()
@@ -1036,18 +1044,31 @@ def admin_dashboard():
     # --------------------------------------------------------
 
     cursor.execute("""
+
     SELECT
+
         students.full_name,
+
         careers.career_name,
+
         recommendations.match_percentage,
+
         recommendations.generated_at
+
     FROM recommendations
+
     JOIN students
     ON recommendations.student_id = students.id
+
     JOIN careers
     ON recommendations.career_id = careers.id
+
+    WHERE recommendations.rank_position = 1
+
     ORDER BY recommendations.generated_at DESC
+
     LIMIT 5
+
     """)
 
     recent_assessments = cursor.fetchall()
@@ -3405,9 +3426,10 @@ def recommendation():
 
     )
 
-#============================================================
+# ============================================================
 # ASSESSMENT HISTORY
 # ============================================================
+
 @app.route("/history")
 def history():
 
@@ -3415,15 +3437,23 @@ def history():
         flash("Please login first.", "warning")
         return redirect(url_for("login"))
 
-    cursor = mysql.connection.cursor()
+    cursor = mysql.connection.cursor(DictCursor)
 
     cursor.execute("""
+
         SELECT
-            id,
-            assessment_date
-        FROM assessment
-        WHERE student_id=%s
-        ORDER BY assessment_date DESC
+
+            DATE(MIN(s.assessment_date)) AS assessment_date
+
+        FROM student_skill_assessment s
+
+        JOIN student_interest_assessment i
+        ON s.student_id = i.student_id
+
+        WHERE s.student_id=%s
+
+        GROUP BY s.student_id
+
     """, (session["user_id"],))
 
     history = cursor.fetchall()
@@ -3448,72 +3478,45 @@ def analytics():
 
         return redirect(url_for("login"))
 
-    cursor = mysql.connection.cursor()
+    cursor = mysql.connection.cursor(DictCursor)
 
     cursor.execute("""
 
-    SELECT
+        SELECT
 
-    programming,
-    mathematics,
-    communication,
-    leadership,
-    creativity,
-    problem_solving,
-    teamwork,
-    technology_interest,
-    business_interest,
-    healthcare_interest,
-    analytical_thinking,
-    research_interest,
-    public_speaking,
-    entrepreneurship,
-    attention_to_detail
+            skills.skill_name,
+            student_skill_assessment.score
 
-    FROM assessment
+        FROM student_skill_assessment
 
-    WHERE student_id=%s
+        JOIN skills
+        ON skills.id = student_skill_assessment.skill_id
 
-    ORDER BY id DESC
+        WHERE student_skill_assessment.student_id=%s
 
-    LIMIT 1
+        ORDER BY skills.id
 
-    """,(session["user_id"],))
+    """, (session["user_id"],))
 
-    assessment = cursor.fetchone()
+    skills = cursor.fetchall()
 
-    cursor.close()
+    if not skills:
 
-    if not assessment:
+        cursor.close()
 
-        flash("Please complete an assessment first.","warning")
+        flash("Please complete the assessment first.", "warning")
 
-        return redirect (url_for("skills_assessment"))
+        return redirect(url_for("skills_assessment"))
 
-    labels = [
+    labels = [row["skill_name"] for row in skills]
 
-        "Programming",
-        "Mathematics",
-        "Communication",
-        "Leadership",
-        "Creativity",
-        "Problem Solving",
-        "Teamwork",
-        "Technology",
-        "Business",
-        "Healthcare",
-        "Analytical",
-        "Research",
-        "Public Speaking",
-        "Entrepreneurship",
-        "Attention to Detail"
-
-    ]
-
-    values = list(assessment)
+    values = [row["score"] for row in skills]
 
     highest = labels[values.index(max(values))]
+
     lowest = labels[values.index(min(values))]
+
+    cursor.close()
 
     return render_template(
 
@@ -3528,7 +3531,6 @@ def analytics():
         lowest=lowest
 
     )
-
 
 # ============================================================
 # DOWNLOAD RECOMMENDATION PDF
