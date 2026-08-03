@@ -977,8 +977,7 @@ def admin_dashboard():
     JOIN careers
     ON recommendations.career_id = careers.id
     GROUP BY careers.career_name
-    ORDER BY total DESC
-    WHERE recommendations.rank_position = 1
+    ORDER BY total DESC    
     """)
 
     career_chart = cursor.fetchall()
@@ -1802,17 +1801,35 @@ def admin_assessments():
 
         SELECT
 
-            assessment.*,
+            students.id AS student_id,
+            students.full_name,
+            students.department,
+            students.level,
 
-            students.full_name
+            MIN(student_skill_assessment.assessment_date) AS assessment_date
+            AS assessment_date,
 
-        FROM assessment
+            COUNT(DISTINCT student_skill_assessment.skill_id)
+            AS total_skills,
 
-        JOIN students
+            COUNT(DISTINCT student_interest_assessment.interest_id)
+            AS total_interests
 
-        ON assessment.student_id = students.id
+        FROM students
 
-        ORDER BY assessment.assessment_date DESC
+        JOIN student_skill_assessment
+        ON students.id = student_skill_assessment.student_id
+
+        JOIN student_interest_assessment
+        ON students.id = student_interest_assessment.student_id
+
+        GROUP BY
+            students.id,
+            students.full_name,
+            students.department,
+            students.level
+
+        ORDER BY assessment_date DESC
 
     """)
 
