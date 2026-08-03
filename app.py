@@ -2964,7 +2964,7 @@ def recommendation():
 
         cursor.close()
 
-        return redirect(url_for("skill_assessment"))
+        return redirect(url_for("skills_assessment"))
 
     cursor = mysql.connection.cursor()
 
