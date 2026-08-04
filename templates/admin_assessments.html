@@ -23,49 +23,59 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 
 <body class="{% if session.get('theme') == 'dark' %}dark-mode{% endif %}">
 
+<!-- ================= SIDEBAR ================= -->
+
 <div class="sidebar">
 
-<h3>Career Admin</h3>
+    <h3>Career Admin</h3>
 
-<a href="{{ url_for('admin_dashboard') }}">
-<i class="fas fa-home"></i> Dashboard
-</a>
+    <a href="{{ url_for('admin_dashboard') }}">
+        <i class="fas fa-home"></i> Dashboard
+    </a>
 
-<a href="{{ url_for('admin_students') }}">
-<i class="fas fa-user-graduate"></i> Students
-</a>
+    <a href="{{ url_for('admin_students') }}">
+        <i class="fas fa-user-graduate"></i> Students
+    </a>
 
-<a href="{{ url_for('admin_manage_careers') }}">
-<i class="fas fa-briefcase"></i> Manage Careers
-</a>
+    <a href="{{ url_for('admin_manage_careers') }}">
+        <i class="fas fa-briefcase"></i> Manage Careers
+    </a>
 
-<a href="{{ url_for('admin_assessments') }}" class="active">
-<i class="fas fa-file-alt"></i> Assessments
-</a>
+    <a href="{{ url_for('admin_assessments') }}" class="active">
+        <i class="fas fa-file-alt"></i> Assessments
+    </a>
 
-<a href="{{ url_for('admin_recommendations') }}">
-<i class="fas fa-robot"></i> Recommendations
-</a>
+    <a href="{{ url_for('admin_recommendations') }}">
+        <i class="fas fa-robot"></i> Recommendations
+    </a>
 
-<a href="{{ url_for('admin_analytics') }}">
-<i class="fas fa-chart-line"></i> Analytics
-</a>
+    <a href="{{ url_for('admin_analytics') }}">
+        <i class="fas fa-chart-line"></i> Analytics
+    </a>
 
-<a href="{{ url_for('admin_settings') }}">
-<i class="fas fa-cog"></i> Settings
-</a>
+    <a href="{{ url_for('admin_settings') }}">
+        <i class="fas fa-cog"></i> Settings
+    </a>
 
-<a href="{{ url_for('admin_logout') }}">
-<i class="fas fa-sign-out-alt"></i> Logout
-</a>
+    <a href="{{ url_for('admin_logout') }}">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
 
 </div>
+
+<!-- ================= MAIN ================= -->
 
 <div class="main">
 
 <div class="topbar">
 
-<h3>Assessment Records</h3>
+<h3>
+
+<i class="fas fa-file-alt me-2"></i>
+
+Student Assessments
+
+</h3>
 
 </div>
 
@@ -73,9 +83,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 
 <div class="card-header bg-primary text-white">
 
-<h4>
-
-<i class="fas fa-file-alt me-2"></i>
+<h4 class="mb-0">
 
 Completed Assessments
 
@@ -86,9 +94,13 @@ Completed Assessments
 <div class="card-body">
 
 <input
+
 type="text"
-class="form-control mb-4"
+
 id="searchInput"
+
+class="form-control mb-4"
+
 placeholder="Search student...">
 
 <div class="table-responsive">
@@ -107,11 +119,13 @@ placeholder="Search student...">
 
 <th>Level</th>
 
-<th>Skills Completed</th>
+<th>Date</th>
 
-<th>Interests Completed</th>
+<th>Skills</th>
 
-<th>Assessment Date</th>
+<th>Interests</th>
+
+<th>Action</th>
 
 </tr>
 
@@ -130,24 +144,61 @@ placeholder="Search student...">
 <td>{{ assessment.department }}</td>
 
 <td>
+
 <span class="badge bg-primary">
+
 {{ assessment.level }}
-</span>
-</td>
 
-<td>
-<span class="badge bg-success">
-{{ assessment.total_skills }}
 </span>
-</td>
 
-<td>
-<span class="badge bg-info">
-{{ assessment.total_interests }}
-</span>
 </td>
 
 <td>{{ assessment.assessment_date }}</td>
+
+<td>
+
+<span class="badge bg-success">
+
+{{ assessment.total_skills }}
+
+</span>
+
+</td>
+
+<td>
+
+<span class="badge bg-info">
+
+{{ assessment.total_interests }}
+
+</span>
+
+</td>
+
+<td>
+
+    <a
+    href="{{ url_for('admin_view_assessment', student_id=assessment.student_id) }}"
+    class="btn btn-info btn-sm">
+
+        <i class="fas fa-eye"></i>
+
+        View
+
+    </a>
+
+    <a
+    href="{{ url_for('admin_delete_assessment', student_id=assessment.student_id) }}"
+    class="btn btn-danger btn-sm"
+    onclick="return confirm('Delete this assessment and all generated recommendations?')">
+
+        <i class="fas fa-trash"></i>
+
+        Delete
+
+    </a>
+
+</td>
 
 </tr>
 
@@ -177,7 +228,9 @@ let rows = document.querySelectorAll("#assessmentTable tr");
 
 rows.forEach(function(row){
 
-row.style.display = row.innerText.toLowerCase().includes(value)
+row.style.display =
+
+row.innerText.toLowerCase().includes(value)
 
 ? ""
 
@@ -192,3 +245,4 @@ row.style.display = row.innerText.toLowerCase().includes(value)
 </body>
 
 </html>
+

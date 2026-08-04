@@ -3,315 +3,710 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
 
-<title>Admin Analytics</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Admin Analytics</title>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/theme.css') }}">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 
-<style>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/theme.css') }}">
 
-body{
-    background:#f4f7fb;
-}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin.css') }}">
 
-.card{
-    border:none;
-    border-radius:18px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-.analytics-card{
-    transition:.3s;
-}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-.analytics-card:hover{
-    transform:translateY(-5px);
-}
+    <style>
 
-.icon-box{
-    width:70px;
-    height:70px;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin:auto;
-    color:white;
-    font-size:28px;
-}
+        body{
+            background:#f4f7fb;
+        }
 
-.bg-blue{
-    background:#23408e;
-}
+        .card{
+            border:none;
+            border-radius:18px;
+            box-shadow:0 8px 20px rgba(0,0,0,.08);
+        }
 
-.bg-green{
-    background:#28a745;
-}
+        .analytics-card{
+            transition:.3s;
+        }
 
-.bg-orange{
-    background:#ff9800;
-}
+        .analytics-card:hover{
+            transform:translateY(-5px);
+        }
 
-.table{
-    margin-bottom:0;
-}
+        .icon-box{
 
-h2{
-    color:#23408e;
-    font-weight:bold;
-}
+            width:70px;
+            height:70px;
 
-</style>
+            border-radius:50%;
+
+            display:flex;
+
+            justify-content:center;
+            align-items:center;
+
+            margin:auto;
+
+            color:white;
+
+            font-size:28px;
+
+        }
+
+        .bg-blue{
+            background:#23408e;
+        }
+
+        .bg-green{
+            background:#28a745;
+        }
+
+        .bg-orange{
+            background:#ff9800;
+        }
+
+        .bg-red{
+            background:#dc3545;
+        }
+
+        h2{
+
+            color:#23408e;
+
+            font-weight:bold;
+
+        }
+
+        .table{
+
+            margin-bottom:0;
+
+        }
+
+    </style>
 
 </head>
 
 <body class="{% if session.get('theme') == 'dark' %}dark-mode{% endif %}">
 
 <div class="container py-5">
+
 {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
+{% if messages %}
 
-        {% for category, message in messages %}
+{% for category, message in messages %}
 
-        <div class="alert alert-{{ category }} alert-dismissible fade show mt-3">
+<div class="alert alert-{{ category }} alert-dismissible fade show">
 
-            {{ message }}
+    {{ message }}
 
-            <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert">
-            </button>
+    <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
 
-        </div>
+</div>
 
-        {% endfor %}
+{% endfor %}
 
-    {% endif %}
+{% endif %}
 {% endwith %}
 
 <h2 class="mb-4">
 
-<i class="fas fa-chart-line"></i>
+    <i class="fas fa-chart-line me-2"></i>
 
-System Analytics
+    System Analytics
 
 </h2>
 
-<div class="row">
-
-<div class="col-md-4 mb-4">
-
-<div class="card analytics-card">
-
-<div class="card-body text-center">
-
-<div class="icon-box bg-blue">
-
-<i class="fas fa-user-graduate"></i>
-
-</div>
-
-<h3 class="mt-3">
-
-{{ total_students }}
-
-</h3>
-
-<h5>Total Students</h5>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="col-md-4 mb-4">
-
-<div class="card analytics-card">
-
-<div class="card-body text-center">
-
-<div class="icon-box bg-green">
-
-<i class="fas fa-briefcase"></i>
-
-</div>
-
-<h3 class="mt-3">
-
-{{ total_careers }}
-
-</h3>
-
-<h5>Total Careers</h5>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="col-md-4 mb-4">
-
-<div class="card analytics-card">
-
-<div class="card-body text-center">
-
-<div class="icon-box bg-orange">
-
-<i class="fas fa-file-alt"></i>
-
-</div>
-
-<h3 class="mt-3">
-
-{{ total_assessments }}
-
-</h3>
-
-<h5>Total Assessments</h5>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
+<!-- ===================================================== -->
+<!-- SUMMARY CARDS -->
+<!-- ===================================================== -->
 
 <div class="row">
 
-<div class="col-lg-6 mb-4">
+    <!-- Students -->
 
-<div class="card">
+    <div class="col-lg-3 col-md-6 mb-4">
 
-<div class="card-header bg-primary text-white">
+        <div class="card analytics-card">
 
-Latest Students
+            <div class="card-body text-center">
 
-</div>
+                <div class="icon-box bg-blue">
 
-<div class="table-responsive">
+                    <i class="fas fa-user-graduate"></i>
 
-<table class="table table-striped">
+                </div>
 
-<thead>
+                <h3 class="mt-3">
 
-<tr>
+                    {{ total_students }}
 
-<th>Name</th>
+                </h3>
 
-<th>Department</th>
+                <h5>Total Students</h5>
 
-<th>Level</th>
+            </div>
 
-</tr>
+        </div>
 
-</thead>
+    </div>
 
-<tbody>
+    <!-- Careers -->
 
-{% for student in latest_students %}
+    <div class="col-lg-3 col-md-6 mb-4">
 
-<tr>
+        <div class="card analytics-card">
 
-<td>{{ student[0] }}</td>
+            <div class="card-body text-center">
 
-<td>{{ student[1] }}</td>
+                <div class="icon-box bg-green">
 
-<td>{{ student[2] }}</td>
+                    <i class="fas fa-briefcase"></i>
 
-</tr>
+                </div>
 
-{% endfor %}
+                <h3 class="mt-3">
 
-</tbody>
+                    {{ total_careers }}
 
-</table>
+                </h3>
 
-</div>
+                <h5>Total Careers</h5>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-<div class="col-lg-6 mb-4">
+    </div>
 
-<div class="card">
+    <!-- Assessments -->
 
-<div class="card-header bg-success text-white">
+    <div class="col-lg-3 col-md-6 mb-4">
 
-Recent Assessments
+        <div class="card analytics-card">
 
-</div>
+            <div class="card-body text-center">
 
-<div class="table-responsive">
+                <div class="icon-box bg-orange">
 
-<table class="table table-striped">
+                    <i class="fas fa-file-alt"></i>
 
-<thead>
+                </div>
 
-<tr>
+                <h3 class="mt-3">
 
-<th>Name</th>
+                    {{ total_assessments }}
 
-<th>Department</th>
+                </h3>
 
-<th>Level</th>
+                <h5>Total Assessments</h5>
 
-</tr>
+            </div>
 
-</thead>
+        </div>
 
-<tbody>
+    </div>
 
-{% for assessment in recent_assessments %}
+    <!-- Recommendations -->
 
-<tr>
+    <div class="col-lg-3 col-md-6 mb-4">
 
-<td>{{ assessment[0] }}</td>
+        <div class="card analytics-card">
 
-<td>{{ assessment[1] }}</td>
+            <div class="card-body text-center">
 
-<td>{{ assessment[2] }}</td>
+                <div class="icon-box bg-red">
 
-</tr>
+                    <i class="fas fa-robot"></i>
 
-{% endfor %}
+                </div>
 
-</tbody>
+                <h3 class="mt-3">
 
-</table>
+                    {{ total_recommendations }}
 
-</div>
+                </h3>
 
-</div>
+                <h5>Total Recommendations</h5>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-<div class="text-center mt-3">
-
-<a href="{{ url_for('admin_dashboard') }}"
-class="btn btn-secondary">
-
-<i class="fas fa-arrow-left"></i>
-
-Back to Dashboard
-
-</a>
+    </div>
 
 </div>
 
+<!-- ===================================================== -->
+<!-- LATEST STUDENTS & RECENT ASSESSMENTS -->
+<!-- ===================================================== -->
+
+<div class="row mt-4">
+
+    <!-- Latest Students -->
+
+    <div class="col-lg-6 mb-4">
+
+        <div class="card">
+
+            <div class="card-header bg-primary text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-user-graduate me-2"></i>
+
+                    Latest Registered Students
+
+                </h5>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>Name</th>
+
+                            <th>Department</th>
+
+                            <th>Level</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% if latest_students %}
+
+                        {% for student in latest_students %}
+
+                        <tr>
+
+                            <td>{{ student[0] }}</td>
+
+                            <td>{{ student[2] }}</td>
+
+                            <td>
+
+                                <span class="badge bg-primary">
+
+                                    {{ student[3] }}
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="3" class="text-center text-muted">
+
+                                No students found.
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Recent Assessments -->
+
+    <div class="col-lg-6 mb-4">
+
+        <div class="card">
+
+            <div class="card-header bg-success text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-file-alt me-2"></i>
+
+                    Recent Assessments
+
+                </h5>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>Student</th>
+
+                            <th>Department</th>
+
+                            <th>Top Career</th>
+
+                            <th>Match</th>
+
+                            <th>Date</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% if recent_assessments %}
+
+                        {% for assessment in recent_assessments %}
+
+                        <tr>
+
+                            <td>{{ assessment[0] }}</td>
+
+                            <td>{{ assessment[1] }}</td>
+
+                            <td>{{ assessment[2] }}</td>
+
+                            <td>
+
+                                <span class="badge bg-success">
+
+                                    {{ assessment[3] }}%
+
+                                </span>
+
+                            </td>
+
+                            <td>{{ assessment[4] }}</td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="5" class="text-center text-muted">
+
+                                No assessments found.
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
+
+<!-- ===================================================== -->
+<!-- CHARTS -->
+<!-- ===================================================== -->
+
+<div class="row mt-4">
+
+    <!-- Career Recommendation Distribution -->
+
+    <div class="col-lg-8 mb-4">
+
+        <div class="card">
+
+            <div class="card-header bg-primary text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-chart-bar me-2"></i>
+
+                    Career Recommendation Distribution
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas id="careerChart" height="120"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Support Requests -->
+
+    <div class="col-lg-4 mb-4">
+
+        <div class="card">
+
+            <div class="card-header bg-success text-white">
+
+                <h5 class="mb-0">
+
+                    <i class="fas fa-headset me-2"></i>
+
+                    Support Requests
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <canvas id="supportChart" height="220"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- FOOTER -->
+<!-- ===================================================== -->
+
+<div class="text-center mt-5">
+
+    <a href="{{ url_for('admin_dashboard') }}"
+       class="btn btn-secondary">
+
+        <i class="fas fa-arrow-left me-2"></i>
+
+        Back to Dashboard
+
+    </a>
+
+    <hr class="mt-5">
+
+    <h5 class="text-primary">
+
+        Career Recommendation System
+
+    </h5>
+
+    <p class="text-muted">
+
+        Administrator Analytics Dashboard
+
+    </p>
+
+    <p class="text-muted">
+
+        Department of Computer Science
+
+    </p>
+
+    <p class="text-muted">
+
+        Ahmadu Bello University • Final Year Project • 2026
+
+    </p>
+
+</div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- BOOTSTRAP -->
+<!-- ===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ===================================================== -->
+<!-- CHARTS -->
+<!-- ===================================================== -->
+
+<script>
+
+// -----------------------------------------------------
+// Career Recommendation Chart
+// -----------------------------------------------------
+
+const careerCtx = document.getElementById("careerChart");
+
+new Chart(careerCtx, {
+
+    type: "bar",
+
+    data: {
+
+        labels: [
+
+            {% for career in career_chart %}
+                "{{ career[0] }}",
+            {% endfor %}
+
+        ],
+
+        datasets: [{
+
+            label: "Students",
+
+            data: [
+
+                {% for career in career_chart %}
+                    {{ career[1] }},
+                {% endfor %}
+
+            ],
+
+            backgroundColor: [
+
+                "#23408e",
+                "#28a745",
+                "#ff9800",
+                "#dc3545",
+                "#6f42c1",
+                "#17a2b8",
+                "#20c997"
+
+            ],
+
+            borderRadius:8
+
+        }]
+
+    },
+
+    options: {
+
+        responsive:true,
+
+        plugins:{
+
+            legend:{
+                display:false
+            }
+
+        },
+
+        scales:{
+
+            y:{
+
+                beginAtZero:true,
+
+                ticks:{
+
+                    precision:0
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+// -----------------------------------------------------
+// Support Requests Chart
+// -----------------------------------------------------
+
+const supportCtx = document.getElementById("supportChart");
+
+new Chart(supportCtx,{
+
+    type:"doughnut",
+
+    data:{
+
+        labels:[
+
+            "Pending",
+
+            "Resolved"
+
+        ],
+
+        datasets:[{
+
+            data:[
+
+                {{ pending_requests }},
+
+                {{ resolved_requests }}
+
+            ],
+
+            backgroundColor:[
+
+                "#ffc107",
+
+                "#28a745"
+
+            ],
+
+            borderWidth:0
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        plugins:{
+
+            legend:{
+
+                position:"bottom"
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
 
 </body>
-
 </html>

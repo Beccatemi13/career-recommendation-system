@@ -937,6 +937,7 @@ def admin_logout():
 def admin_dashboard():
 
     if "admin_id" not in session:
+
         return redirect(url_for("admin_login"))
 
     cursor = mysql.connection.cursor()
@@ -957,16 +958,37 @@ def admin_dashboard():
     """)
     total_careers = cursor.fetchone()[0]
 
+    # Students who completed BOTH assessments
     cursor.execute("""
-        SELECT COUNT(DISTINCT student_id)
-        FROM student_skill_assessment
+
+        SELECT COUNT(*)
+
+        FROM (
+
+            SELECT s.student_id
+
+            FROM student_skill_assessment s
+
+            INNER JOIN student_interest_assessment i
+                ON s.student_id = i.student_id
+
+            GROUP BY s.student_id
+
+        ) completed
+
     """)
+
     total_assessments = cursor.fetchone()[0]
 
+    # Students that have recommendations
     cursor.execute("""
+
         SELECT COUNT(DISTINCT student_id)
+
         FROM recommendations
+
     """)
+
     total_recommendations = cursor.fetchone()[0]
 
     # ============================================================
@@ -974,18 +996,22 @@ def admin_dashboard():
     # ============================================================
 
     cursor.execute("""
+
         SELECT
+
             careers.career_name,
+
             COUNT(*) AS total
 
         FROM recommendations
 
         JOIN careers
-            ON recommendations.career_id = careers.id
+            ON careers.id = recommendations.career_id
 
         GROUP BY careers.career_name
 
         ORDER BY total DESC
+
     """)
 
     career_chart = cursor.fetchall()
@@ -995,17 +1021,27 @@ def admin_dashboard():
     # ============================================================
 
     cursor.execute("""
+
         SELECT COUNT(*)
+
         FROM support_requests
+
         WHERE status = 'Pending'
+
     """)
+
     pending_requests = cursor.fetchone()[0]
 
     cursor.execute("""
+
         SELECT COUNT(*)
+
         FROM support_requests
+
         WHERE status = 'Resolved'
+
     """)
+
     resolved_requests = cursor.fetchone()[0]
 
     # ============================================================
@@ -1013,11 +1049,17 @@ def admin_dashboard():
     # ============================================================
 
     cursor.execute("""
+
         SELECT
+
             full_name,
+
             email,
+
             department,
+
             level,
+
             created_at
 
         FROM students
@@ -1025,51 +1067,51 @@ def admin_dashboard():
         ORDER BY created_at DESC
 
         LIMIT 5
+
     """)
 
     latest_students = cursor.fetchall()
 
     # ============================================================
-    # RECENT ASSESSMENTS (TOP RECOMMENDATION ONLY)
+    # RECENT ASSESSMENTS
     # ============================================================
 
     cursor.execute("""
-    SELECT
 
-        students.full_name,
+        SELECT
 
-        students.department,
+            students.full_name,
 
-        careers.career_name,
+            students.department,
 
-        recommendations.match_percentage,
+            careers.career_name,
 
-        DATE(MAX(student_skill_assessment.assessment_date)) AS assessment_date
+            recommendations.match_percentage,
 
-    FROM recommendations
+            (
 
-    JOIN students
-    ON students.id = recommendations.student_id
+                SELECT DATE(MIN(s.assessment_date))
 
-    JOIN careers
-    ON careers.id = recommendations.career_id
+                FROM student_skill_assessment s
 
-    JOIN student_skill_assessment
-    ON student_skill_assessment.student_id = students.id
+                WHERE s.student_id = students.id
 
-    WHERE recommendations.rank_position = 1
+            ) AS assessment_date
 
-    GROUP BY
+        FROM recommendations
 
-        students.id,
-        students.full_name,
-        students.department,
-        careers.career_name,
-        recommendations.match_percentage
+        JOIN students
+            ON students.id = recommendations.student_id
 
-    ORDER BY assessment_date DESC
+        JOIN careers
+            ON careers.id = recommendations.career_id
 
-    LIMIT 5
+        WHERE recommendations.rank_position = 1
+
+        ORDER BY assessment_date DESC
+
+        LIMIT 5
+
     """)
 
     recent_assessments = cursor.fetchall()
@@ -1077,22 +1119,28 @@ def admin_dashboard():
     cursor.close()
 
     return render_template(
+
         "admin_dashboard.html",
 
         total_students=total_students,
+
         total_careers=total_careers,
+
         total_assessments=total_assessments,
+
         total_recommendations=total_recommendations,
 
         career_chart=career_chart,
 
         pending_requests=pending_requests,
+
         resolved_requests=resolved_requests,
 
         latest_students=latest_students,
-        recent_assessments=recent_assessments
-    )
 
+        recent_assessments=recent_assessments
+
+    )
 
 # ============================================================
 # ADMIN PROFILE
@@ -1214,9 +1262,9 @@ def admin_add_career():
 
     return render_template("admin_add_careers.html")
 
-# ==========================================================
+# ============================================================
 # ADMIN MANAGE CAREERS
-# ==========================================================
+# ============================================================
 
 @app.route("/admin/manage_careers")
 def admin_manage_careers():
@@ -1235,56 +1283,65 @@ def admin_manage_careers():
 
         cursor.execute("""
 
-            SELECT *
+            SELECT
+
+                id,
+                career_name,
+                career_field,
+                description,
+                required_skills,
+                certifications,
+                learning_platforms,
+                industries,
+                career_outlook,
+                minimum_qualification,
+                salary_note
 
             FROM careers
 
             WHERE
 
                 career_name LIKE %s
-
                 OR career_field LIKE %s
-
                 OR description LIKE %s
-
                 OR required_skills LIKE %s
-
                 OR certifications LIKE %s
-
                 OR learning_platforms LIKE %s
-
                 OR industries LIKE %s
-
                 OR career_outlook LIKE %s
 
             ORDER BY career_name ASC
 
-        """,
+        """, (
 
-        (
-
-            "%" + search + "%",
-
-            "%" + search + "%",
-
-            "%" + search + "%",
-
-            "%" + search + "%",
-
-            "%" + search + "%",
-
-            "%" + search + "%",
-
-            "%" + search + "%",
-
-            "%" + search + "%"
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%",
+            f"%{search}%"
 
         ))
+
     else:
 
         cursor.execute("""
 
-            SELECT *
+            SELECT
+
+                id,
+                career_name,
+                career_field,
+                description,
+                required_skills,
+                certifications,
+                learning_platforms,
+                industries,
+                career_outlook,
+                minimum_qualification,
+                salary_note
 
             FROM careers
 
@@ -1796,34 +1853,51 @@ def admin_assessments():
 
         SELECT
 
-            students.id AS student_id,
-            students.full_name,
-            students.department,
-            students.level,
+            s.id AS student_id,
 
-            MIN(student_skill_assessment.assessment_date) AS assessment_date
-            
-            COUNT(DISTINCT student_skill_assessment.skill_id)
-            AS total_skills,
+            s.full_name,
 
-            COUNT(DISTINCT student_interest_assessment.interest_id)
-            AS total_interests
+            s.department,
 
-        FROM students
+            s.level,
 
-        JOIN student_skill_assessment
-        ON students.id = student_skill_assessment.student_id
+            MIN(ssa.assessment_date) AS assessment_date,
 
-        JOIN student_interest_assessment
-        ON students.id = student_interest_assessment.student_id
+            COUNT(DISTINCT ssa.skill_id) AS total_skills,
+
+            COUNT(DISTINCT sia.interest_id) AS total_interests
+
+        FROM students s
+
+        LEFT JOIN student_skill_assessment ssa
+
+            ON s.id = ssa.student_id
+
+        LEFT JOIN student_interest_assessment sia
+
+            ON s.id = sia.student_id
 
         GROUP BY
-            students.id,
-            students.full_name,
-            students.department,
-            students.level
 
-        ORDER BY assessment_date DESC
+            s.id,
+
+            s.full_name,
+
+            s.department,
+
+            s.level
+
+        HAVING
+
+            total_skills > 0
+
+            OR
+
+            total_interests > 0
+
+        ORDER BY
+
+            assessment_date DESC
 
     """)
 
@@ -1843,57 +1917,76 @@ def admin_assessments():
 # ADMIN VIEW ASSESSMENT
 # ============================================================
 
-@app.route("/admin/assessment/<int:assessment_id>")
-def admin_view_assessment(assessment_id):
+@app.route("/admin/assessment/<int:student_id>")
+def admin_view_assessment(student_id):
 
     if "admin_id" not in session:
-
         flash("Please login first.", "warning")
-
         return redirect(url_for("admin_login"))
 
     cursor = mysql.connection.cursor(DictCursor)
 
+    # ---------------------------------------------
+    # Student Information
+    # ---------------------------------------------
     cursor.execute("""
-
         SELECT
+            id,
+            full_name,
+            email,
+            department,
+            level,
+            gender
+        FROM students
+        WHERE id=%s
+    """, (student_id,))
 
-            assessment.*,
+    student = cursor.fetchone()
 
-            students.full_name,
+    if not student:
+        cursor.close()
+        flash("Student not found.", "danger")
+        return redirect(url_for("admin_assessments"))
 
-            students.email,
+    # ---------------------------------------------
+    # Skill Assessment
+    # ---------------------------------------------
+    cursor.execute("""
+        SELECT
+            skills.skill_name,
+            student_skill_assessment.score
+        FROM student_skill_assessment
+        JOIN skills
+            ON skills.id = student_skill_assessment.skill_id
+        WHERE student_skill_assessment.student_id=%s
+        ORDER BY skills.id
+    """, (student_id,))
 
-            students.department,
+    skills = cursor.fetchall()
 
-            students.level
+    # ---------------------------------------------
+    # Interest Assessment
+    # ---------------------------------------------
+    cursor.execute("""
+        SELECT
+            interests.interest_name,
+            student_interest_assessment.score
+        FROM student_interest_assessment
+        JOIN interests
+            ON interests.id = student_interest_assessment.interest_id
+        WHERE student_interest_assessment.student_id=%s
+        ORDER BY interests.id
+    """, (student_id,))
 
-        FROM assessment
-
-        JOIN students
-
-        ON assessment.student_id = students.id
-
-        WHERE assessment.id=%s
-
-    """, (assessment_id,))
-
-    assessment = cursor.fetchone()
+    interests = cursor.fetchall()
 
     cursor.close()
 
-    if not assessment:
-
-        flash("Assessment not found.", "danger")
-
-        return redirect(url_for("admin_assessments"))
-
     return render_template(
-
         "admin_view_assessment.html",
-
-        assessment=assessment
-
+        student=student,
+        skills=skills,
+        interests=interests
     )
 
 
@@ -1901,8 +1994,8 @@ def admin_view_assessment(assessment_id):
 # ADMIN DELETE ASSESSMENT
 # ============================================================
 
-@app.route("/admin/assessment/delete/<int:assessment_id>")
-def admin_delete_assessment(assessment_id):
+@app.route("/admin/assessment/delete/<int:student_id>")
+def admin_delete_assessment(student_id):
 
     if "admin_id" not in session:
 
@@ -1912,13 +2005,32 @@ def admin_delete_assessment(assessment_id):
 
     cursor = mysql.connection.cursor()
 
-    cursor.execute(
+    # Delete recommendations first
+    cursor.execute("""
 
-        "DELETE FROM assessment WHERE id=%s",
+        DELETE FROM recommendations
 
-        (assessment_id,)
+        WHERE student_id=%s
 
-    )
+    """, (student_id,))
+
+    # Delete interest assessment
+    cursor.execute("""
+
+        DELETE FROM student_interest_assessment
+
+        WHERE student_id=%s
+
+    """, (student_id,))
+
+    # Delete skill assessment
+    cursor.execute("""
+
+        DELETE FROM student_skill_assessment
+
+        WHERE student_id=%s
+
+    """, (student_id,))
 
     mysql.connection.commit()
 
@@ -1949,6 +2061,63 @@ def admin_students():
 
     cursor = mysql.connection.cursor(DictCursor)
 
+    # --------------------------------------------------------
+    # DASHBOARD COUNTS
+    # --------------------------------------------------------
+
+    cursor.execute("SELECT COUNT(*) AS total FROM students")
+    total_students = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(DISTINCT student_id) AS total
+        FROM student_skill_assessment
+    """)
+    total_assessments = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(DISTINCT student_id) AS total
+        FROM recommendations
+    """)
+    total_recommendations = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(DISTINCT department) AS total
+        FROM students
+    """)
+    total_departments = cursor.fetchone()["total"]
+    # --------------------------------------------------------
+    # TOTAL STUDENTS
+    # --------------------------------------------------------
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM students
+    """)
+
+    total_students = cursor.fetchone()["COUNT(*)"]
+
+    # --------------------------------------------------------
+    # TOTAL DEPARTMENTS
+    # --------------------------------------------------------
+
+    cursor.execute("""
+        SELECT COUNT(DISTINCT department)
+        FROM students
+    """)
+
+    total_departments = cursor.fetchone()["COUNT(DISTINCT department)"]
+
+    # --------------------------------------------------------
+    # ACTIVE STUDENTS
+    # (Currently same as total students)
+    # --------------------------------------------------------
+
+    active_students = total_students
+
+    # --------------------------------------------------------
+    # STUDENTS LIST
+    # --------------------------------------------------------
+
     cursor.execute("""
 
         SELECT
@@ -1958,7 +2127,8 @@ def admin_students():
             email,
             gender,
             department,
-            level
+            level,
+            profile_picture
 
         FROM students
 
@@ -1974,10 +2144,18 @@ def admin_students():
 
         "admin_students.html",
 
-        students=students
+        students=students,
+
+        total_students=total_students,
+
+        total_assessments=total_assessments,
+
+        total_recommendations=total_recommendations,
+
+        total_departments=total_departments
 
     )
-
+        
 # ============================================================
 # ADMIN RECOMMENDATIONS
 # ============================================================
@@ -2019,8 +2197,8 @@ def admin_recommendations():
         ON careers.id = recommendations.career_id
 
         ORDER BY
-
-            recommendations.generated_at DESC,
+           
+           recommendations.generated_at DESC,
             recommendations.student_id,
             recommendations.rank_position
 
@@ -2042,8 +2220,8 @@ def admin_recommendations():
 # ADMIN VIEW RECOMMENDATION
 # ============================================================
 
-@app.route("/admin/recommendation/<int:assessment_id>")
-def admin_view_recommendation(assessment_id):
+@app.route("/admin/recommendation/<int:student_id>")
+def admin_view_recommendation(student_id):
 
     if "admin_id" not in session:
 
@@ -2053,54 +2231,90 @@ def admin_view_recommendation(assessment_id):
 
     cursor = mysql.connection.cursor(DictCursor)
 
+    # ============================================================
+    # STUDENT INFORMATION
+    # ============================================================
+
     cursor.execute("""
 
         SELECT
 
-            assessment.*,
+            id,
+            full_name,
+            email,
+            department,
+            level,
+            gender,
+            profile_picture
 
-            students.full_name,
+        FROM students
 
-            students.email,
+        WHERE id=%s
 
-            students.department,
+    """, (student_id,))
 
-            students.level
+    student = cursor.fetchone()
 
-        FROM assessment
+    if not student:
 
-        JOIN students
+        cursor.close()
 
-        ON students.id = assessment.student_id
-
-        WHERE assessment.id=%s
-
-    """, (assessment_id,))
-
-    recommendation = cursor.fetchone()
-
-    cursor.close()
-
-    if not recommendation:
-
-        flash("Recommendation not found.", "danger")
+        flash("Student not found.", "danger")
 
         return redirect(url_for("admin_recommendations"))
+
+    # ============================================================
+    # STUDENT RECOMMENDATIONS
+    # ============================================================
+
+    cursor.execute("""
+
+        SELECT
+
+            recommendations.rank_position,
+            recommendations.match_percentage,
+            recommendations.confidence,
+            recommendations.generated_at,
+
+            careers.career_name,
+            careers.career_field,
+            careers.description,
+            careers.minimum_qualification,
+            careers.salary_note,
+            careers.career_outlook
+
+        FROM recommendations
+
+        JOIN careers
+
+        ON careers.id = recommendations.career_id
+
+        WHERE recommendations.student_id=%s
+
+        ORDER BY recommendations.rank_position ASC
+
+    """, (student_id,))
+
+    recommendations = cursor.fetchall()
+
+    cursor.close()
 
     return render_template(
 
         "admin_view_recommendation.html",
 
-        recommendation=recommendation
+        student=student,
+
+        recommendations=recommendations
 
     )
 
 # ============================================================
-# ADMIN DELETE RECOMMENDATION
+# ADMIN DELETE RECOMMENDATIONS
 # ============================================================
 
-@app.route("/admin/recommendation/delete/<int:assessment_id>")
-def admin_delete_recommendation(assessment_id):
+@app.route("/admin/recommendation/delete/<int:student_id>")
+def admin_delete_recommendation(student_id):
 
     if "admin_id" not in session:
 
@@ -2110,27 +2324,17 @@ def admin_delete_recommendation(assessment_id):
 
     cursor = mysql.connection.cursor()
 
-    cursor.execute(
+    cursor.execute("""
 
-        """
+        DELETE FROM recommendations
 
-        UPDATE assessment
+        WHERE student_id=%s
 
-        SET
+    """, (
 
-            overall_score=0,
+        student_id,
 
-            top_career=NULL,
-
-            recommendation=NULL
-
-        WHERE id=%s
-
-        """,
-
-        (assessment_id,)
-
-    )
+    ))
 
     mysql.connection.commit()
 
@@ -2138,13 +2342,17 @@ def admin_delete_recommendation(assessment_id):
 
     flash(
 
-        "Recommendation removed successfully.",
+        "Student recommendations deleted successfully.",
 
         "success"
 
     )
 
-    return redirect(url_for("admin_recommendations"))
+    return redirect(
+
+        url_for("admin_recommendations")
+
+    )
 
 # ============================================================
 # ADMIN ANALYTICS
@@ -2159,52 +2367,154 @@ def admin_analytics():
 
         return redirect(url_for("admin_login"))
 
-    cursor = mysql.connection.cursor()
+    cursor = mysql.connection.cursor(DictCursor)
 
-    # Total Students
-    cursor.execute("SELECT COUNT(*) FROM students")
-    total_students = cursor.fetchone()[0]
+    # ============================================================
+    # SUMMARY COUNTS
+    # ============================================================
 
-    # Total Careers
-    cursor.execute("SELECT COUNT(*) FROM careers")
-    total_careers = cursor.fetchone()[0]
-
-    # Total Assessments
-    cursor.execute("SELECT COUNT(*) FROM assessment")
-    total_assessments = cursor.fetchone()[0]
-
-    # Latest Students
     cursor.execute("""
-        SELECT full_name, department, level
+        SELECT COUNT(*) AS total
         FROM students
-        ORDER BY id DESC
-        LIMIT 5
     """)
-    latest_students = cursor.fetchall()
+    total_students = cursor.fetchone()["total"]
 
-    # Recent Assessments
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM careers
+    """)
+    total_careers = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(DISTINCT student_id) AS total
+        FROM student_skill_assessment
+    """)
+    total_assessments = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(DISTINCT student_id) AS total
+        FROM recommendations
+    """)
+    total_recommendations = cursor.fetchone()["total"]
+
+    # ============================================================
+    # LATEST STUDENTS
+    # ============================================================
+
     cursor.execute("""
         SELECT
-            students.full_name,
-            students.department,
-            assessment.top_career
-        FROM assessment
-        JOIN students
-        ON assessment.student_id = students.id
-        ORDER BY assessment.id DESC
+            full_name,
+            department,
+            level
+        FROM students
+        ORDER BY created_at DESC
         LIMIT 5
     """)
+
+    latest_students = cursor.fetchall()
+
+    # ============================================================
+    # RECENT ASSESSMENTS
+    # ============================================================
+
+    cursor.execute("""
+        SELECT
+
+            students.full_name,
+
+            careers.career_name,
+
+            DATE(MAX(student_skill_assessment.assessment_date))
+            AS assessment_date
+
+        FROM recommendations
+
+        JOIN students
+            ON students.id = recommendations.student_id
+
+        JOIN careers
+            ON careers.id = recommendations.career_id
+
+        JOIN student_skill_assessment
+            ON student_skill_assessment.student_id = students.id
+
+        WHERE recommendations.rank_position = 1
+
+        GROUP BY
+
+            students.id,
+            students.full_name,
+            careers.career_name
+
+        ORDER BY assessment_date DESC
+
+        LIMIT 5
+    """)
+
     recent_assessments = cursor.fetchall()
+
+    # ============================================================
+    # CAREER DISTRIBUTION
+    # ============================================================
+
+    cursor.execute("""
+        SELECT
+
+            careers.career_name,
+
+            COUNT(*) AS total
+
+        FROM recommendations
+
+        JOIN careers
+            ON careers.id = recommendations.career_id
+
+        WHERE recommendations.rank_position = 1
+
+        GROUP BY careers.career_name
+
+        ORDER BY total DESC
+    """)
+
+    career_chart = cursor.fetchall()
+
+    # ============================================================
+    # SUPPORT REQUESTS
+    # ============================================================
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM support_requests
+        WHERE status='Pending'
+    """)
+    pending_requests = cursor.fetchone()["total"]
+
+    cursor.execute("""
+        SELECT COUNT(*) AS total
+        FROM support_requests
+        WHERE status='Resolved'
+    """)
+    resolved_requests = cursor.fetchone()["total"]
 
     cursor.close()
 
     return render_template(
+
         "admin_analytics.html",
+
         total_students=total_students,
         total_careers=total_careers,
         total_assessments=total_assessments,
+        total_recommendations=total_recommendations,
+
         latest_students=latest_students,
-        recent_assessments=recent_assessments
+        recent_assessments=recent_assessments,
+
+        career_chart=career_chart,
+
+        pending_requests=pending_requests,
+        resolved_requests=resolved_requests
+
     )
 
 # ============================================================

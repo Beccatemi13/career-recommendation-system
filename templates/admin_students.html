@@ -214,74 +214,103 @@ STATISTICS
 
 <div class="row g-4 mb-5">
 
-    <div class="col-lg-4">
+    <!-- Total Students -->
 
-        <div class="card stat-card text-center p-4">
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card stat-card text-center p-4 h-100">
 
             <i class="fas fa-user-graduate fa-3x text-primary mb-3"></i>
 
             <h6 class="text-muted">
-
                 Total Students
-
             </h6>
 
             <h2 class="fw-bold">
-
-                {{ students|length }}
-
+                {{ total_students }}
             </h2>
+
+            <small class="text-muted">
+                Registered Students
+            </small>
 
         </div>
 
     </div>
 
-    <div class="col-lg-4">
+    <!-- Assessments -->
 
-        <div class="card stat-card text-center p-4">
+    <div class="col-lg-3 col-md-6">
 
-            <i class="fas fa-building fa-3x text-success mb-3"></i>
+        <div class="card stat-card text-center p-4 h-100">
+
+            <i class="fas fa-file-alt fa-3x text-success mb-3"></i>
 
             <h6 class="text-muted">
+                Assessments
+            </h6>
 
+            <h2 class="fw-bold">
+                {{ total_assessments }}
+            </h2>
+
+            <small class="text-muted">
+                Completed
+            </small>
+
+        </div>
+
+    </div>
+
+    <!-- Recommendations -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card stat-card text-center p-4 h-100">
+
+            <i class="fas fa-robot fa-3x text-info mb-3"></i>
+
+            <h6 class="text-muted">
+                Recommendations
+            </h6>
+
+            <h2 class="fw-bold">
+                {{ total_recommendations }}
+            </h2>
+
+            <small class="text-muted">
+                Generated
+            </small>
+
+        </div>
+
+    </div>
+
+    <!-- Departments -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card stat-card text-center p-4 h-100">
+
+            <i class="fas fa-building fa-3x text-warning mb-3"></i>
+
+            <h6 class="text-muted">
                 Departments
-
             </h6>
 
             <h2 class="fw-bold">
-
-                Computer Science
-
+                {{ total_departments }}
             </h2>
 
-        </div>
-
-    </div>
-
-    <div class="col-lg-4">
-
-        <div class="card stat-card text-center p-4">
-
-            <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
-
-            <h6 class="text-muted">
-
-                Active Students
-
-            </h6>
-
-            <h2 class="fw-bold">
-
-                {{ students|length }}
-
-            </h2>
+            <small class="text-muted">
+                Registered
+            </small>
 
         </div>
 
     </div>
 
 </div>
-
 
 <!-- ===========================
 SEARCH
@@ -351,7 +380,7 @@ Registered Students
 
 <div class="table-responsive">
 
-<table class="table table-hover align-middle text-nowrap">
+<table id="studentsTable" class="table table-hover align-middle text-nowrap">
 
 <thead>
 
@@ -524,29 +553,27 @@ LIVE SEARCH
 
 const search = document.getElementById("studentSearch");
 
-search.addEventListener("keyup", function(){
+search.addEventListener("keyup", function () {
 
-let filter = search.value.toLowerCase();
+    let filter = search.value.toLowerCase();
 
-let rows = document.querySelectorAll("#studentsTable tbody tr");
+    let rows = document.querySelectorAll("#studentsTable tbody tr");
 
-rows.forEach(function(row){
+    rows.forEach(function (row) {
 
-let text = row.innerText.toLowerCase();
+        let text = row.innerText.toLowerCase();
 
-if(text.includes(filter)){
+        if (text.includes(filter)) {
 
-row.style.display="";
+            row.style.display = "";
 
-}
+        } else {
 
-else{
+            row.style.display = "none";
 
-row.style.display="none";
+        }
 
-}
-
-});
+    });
 
 });
 
