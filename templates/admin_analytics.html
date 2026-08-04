@@ -6,13 +6,12 @@
     <meta charset="UTF-8">
 
     <meta name="viewport"
-          content="width=device-width, initial-scale=1">
+          content="width=device-width, initial-scale=1.0">
 
     <title>Admin Analytics</title>
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/theme.css') }}">
@@ -25,85 +24,149 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
-
-        body{
-            background:#f4f7fb;
-        }
-
-        .card{
-            border:none;
-            border-radius:18px;
-            box-shadow:0 8px 20px rgba(0,0,0,.08);
-        }
-
-        .analytics-card{
-            transition:.3s;
-        }
-
-        .analytics-card:hover{
-            transform:translateY(-5px);
-        }
-
-        .icon-box{
-
-            width:70px;
-            height:70px;
-
-            border-radius:50%;
-
-            display:flex;
-
-            justify-content:center;
-            align-items:center;
-
-            margin:auto;
-
-            color:white;
-
-            font-size:28px;
-
-        }
-
-        .bg-blue{
-            background:#23408e;
-        }
-
-        .bg-green{
-            background:#28a745;
-        }
-
-        .bg-orange{
-            background:#ff9800;
-        }
-
-        .bg-red{
-            background:#dc3545;
-        }
-
-        h2{
-
-            color:#23408e;
-
-            font-weight:bold;
-
-        }
-
-        .table{
-
-            margin-bottom:0;
-
-        }
-
-    </style>
-
 </head>
 
 <body class="{% if session.get('theme') == 'dark' %}dark-mode{% endif %}">
 
-<div class="container py-5">
+<!-- ======================================================
+SIDEBAR
+====================================================== -->
+
+<div class="sidebar">
+
+    <h3>
+
+        Career Admin
+
+    </h3>
+
+    <a href="{{ url_for('admin_dashboard') }}">
+
+        <i class="fas fa-home"></i>
+
+        Dashboard
+
+    </a>
+
+    <a href="{{ url_for('admin_students') }}">
+
+        <i class="fas fa-user-graduate"></i>
+
+        Students
+
+    </a>
+
+    <a href="{{ url_for('admin_manage_careers') }}">
+
+        <i class="fas fa-briefcase"></i>
+
+        Manage Careers
+
+    </a>
+
+    <a href="{{ url_for('admin_assessments') }}">
+
+        <i class="fas fa-file-alt"></i>
+
+        Assessments
+
+    </a>
+
+    <a href="{{ url_for('admin_recommendations') }}">
+
+        <i class="fas fa-robot"></i>
+
+        Recommendations
+
+    </a>
+
+    <a href="{{ url_for('admin_analytics') }}"
+       class="active">
+
+        <i class="fas fa-chart-line"></i>
+
+        Analytics
+
+    </a>
+
+    <a href="{{ url_for('admin_settings') }}">
+
+        <i class="fas fa-cog"></i>
+
+        Settings
+
+    </a>
+
+    <a href="{{ url_for('admin_logout') }}">
+
+        <i class="fas fa-sign-out-alt"></i>
+
+        Logout
+
+    </a>
+
+</div>
+
+<!-- ======================================================
+MAIN CONTENT
+====================================================== -->
+
+<div class="main">
+
+<!-- ======================================================
+TOP BAR
+====================================================== -->
+
+<div class="topbar">
+
+    <div>
+
+        <h3>
+
+            System Analytics
+
+        </h3>
+
+        <p class="text-muted">
+
+            Overall statistics and reports for the Career Recommendation System.
+
+        </p>
+
+    </div>
+
+    <div class="admin-profile">
+
+        <img src="https://ui-avatars.com/api/?name={{ session.admin_username }}&background=23408e&color=fff">
+
+        <div>
+
+            <strong>
+
+                {{ session.admin_username }}
+
+            </strong>
+
+            <br>
+
+            <small class="text-muted">
+
+                Administrator
+
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ======================================================
+FLASH MESSAGE
+====================================================== -->
 
 {% with messages = get_flashed_messages(with_categories=true) %}
+
 {% if messages %}
 
 {% for category, message in messages %}
@@ -113,7 +176,6 @@
     {{ message }}
 
     <button
-        type="button"
         class="btn-close"
         data-bs-dismiss="alert">
     </button>
@@ -123,45 +185,34 @@
 {% endfor %}
 
 {% endif %}
+
 {% endwith %}
 
-<h2 class="mb-4">
+<!-- ======================================================
+SUMMARY CARDS
+====================================================== -->
 
-    <i class="fas fa-chart-line me-2"></i>
-
-    System Analytics
-
-</h2>
-
-<!-- ===================================================== -->
-<!-- SUMMARY CARDS -->
-<!-- ===================================================== -->
-
-<div class="row">
+<div class="row g-4 mb-5">
 
     <!-- Students -->
 
-    <div class="col-lg-3 col-md-6 mb-4">
+    <div class="col-lg-3 col-md-6">
 
-        <div class="card analytics-card">
+        <div class="card stat-card text-center p-4 h-100">
 
-            <div class="card-body text-center">
+            <i class="fas fa-user-graduate fa-3x text-primary mb-3"></i>
 
-                <div class="icon-box bg-blue">
+            <h6 class="text-muted">
 
-                    <i class="fas fa-user-graduate"></i>
+                Total Students
 
-                </div>
+            </h6>
 
-                <h3 class="mt-3">
+            <h2 class="fw-bold">
 
-                    {{ total_students }}
+                {{ total_students }}
 
-                </h3>
-
-                <h5>Total Students</h5>
-
-            </div>
+            </h2>
 
         </div>
 
@@ -169,27 +220,23 @@
 
     <!-- Careers -->
 
-    <div class="col-lg-3 col-md-6 mb-4">
+    <div class="col-lg-3 col-md-6">
 
-        <div class="card analytics-card">
+        <div class="card stat-card text-center p-4 h-100">
 
-            <div class="card-body text-center">
+            <i class="fas fa-briefcase fa-3x text-success mb-3"></i>
 
-                <div class="icon-box bg-green">
+            <h6 class="text-muted">
 
-                    <i class="fas fa-briefcase"></i>
+                Career Paths
 
-                </div>
+            </h6>
 
-                <h3 class="mt-3">
+            <h2 class="fw-bold">
 
-                    {{ total_careers }}
+                {{ total_careers }}
 
-                </h3>
-
-                <h5>Total Careers</h5>
-
-            </div>
+            </h2>
 
         </div>
 
@@ -197,279 +244,23 @@
 
     <!-- Assessments -->
 
-    <div class="col-lg-3 col-md-6 mb-4">
+    <div class="col-lg-3 col-md-6">
 
-        <div class="card analytics-card">
+        <div class="card stat-card text-center p-4 h-100">
 
-            <div class="card-body text-center">
+            <i class="fas fa-file-alt fa-3x text-warning mb-3"></i>
 
-                <div class="icon-box bg-orange">
+            <h6 class="text-muted">
 
-                    <i class="fas fa-file-alt"></i>
+                Assessments
 
-                </div>
+            </h6>
 
-                <h3 class="mt-3">
+            <h2 class="fw-bold">
 
-                    {{ total_assessments }}
+                {{ total_assessments }}
 
-                </h3>
-
-                <h5>Total Assessments</h5>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Recommendations -->
-
-    <div class="col-lg-3 col-md-6 mb-4">
-
-        <div class="card analytics-card">
-
-            <div class="card-body text-center">
-
-                <div class="icon-box bg-red">
-
-                    <i class="fas fa-robot"></i>
-
-                </div>
-
-                <h3 class="mt-3">
-
-                    {{ total_recommendations }}
-
-                </h3>
-
-                <h5>Total Recommendations</h5>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ===================================================== -->
-<!-- LATEST STUDENTS & RECENT ASSESSMENTS -->
-<!-- ===================================================== -->
-
-<div class="row mt-4">
-
-    <!-- Latest Students -->
-
-    <div class="col-lg-6 mb-4">
-
-        <div class="card">
-
-            <div class="card-header bg-primary text-white">
-
-                <h5 class="mb-0">
-
-                    <i class="fas fa-user-graduate me-2"></i>
-
-                    Latest Registered Students
-
-                </h5>
-
-            </div>
-
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-light">
-
-                        <tr>
-
-                            <th>Name</th>
-
-                            <th>Department</th>
-
-                            <th>Level</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    {% if latest_students %}
-
-                        {% for student in latest_students %}
-
-                        <tr>
-
-                            <td>{{ student[0] }}</td>
-
-                            <td>{{ student[2] }}</td>
-
-                            <td>
-
-                                <span class="badge bg-primary">
-
-                                    {{ student[3] }}
-
-                                </span>
-
-                            </td>
-
-                        </tr>
-
-                        {% endfor %}
-
-                    {% else %}
-
-                        <tr>
-
-                            <td colspan="3" class="text-center text-muted">
-
-                                No students found.
-
-                            </td>
-
-                        </tr>
-
-                    {% endif %}
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Recent Assessments -->
-
-    <div class="col-lg-6 mb-4">
-
-        <div class="card">
-
-            <div class="card-header bg-success text-white">
-
-                <h5 class="mb-0">
-
-                    <i class="fas fa-file-alt me-2"></i>
-
-                    Recent Assessments
-
-                </h5>
-
-            </div>
-
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-light">
-
-                        <tr>
-
-                            <th>Student</th>
-
-                            <th>Department</th>
-
-                            <th>Top Career</th>
-
-                            <th>Match</th>
-
-                            <th>Date</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    {% if recent_assessments %}
-
-                        {% for assessment in recent_assessments %}
-
-                        <tr>
-
-                            <td>{{ assessment[0] }}</td>
-
-                            <td>{{ assessment[1] }}</td>
-
-                            <td>{{ assessment[2] }}</td>
-
-                            <td>
-
-                                <span class="badge bg-success">
-
-                                    {{ assessment[3] }}%
-
-                                </span>
-
-                            </td>
-
-                            <td>{{ assessment[4] }}</td>
-
-                        </tr>
-
-                        {% endfor %}
-
-                    {% else %}
-
-                        <tr>
-
-                            <td colspan="5" class="text-center text-muted">
-
-                                No assessments found.
-
-                            </td>
-
-                        </tr>
-
-                    {% endif %}
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ===================================================== -->
-<!-- CHARTS -->
-<!-- ===================================================== -->
-
-<div class="row mt-4">
-
-    <!-- Career Recommendation Distribution -->
-
-    <div class="col-lg-8 mb-4">
-
-        <div class="card">
-
-            <div class="card-header bg-primary text-white">
-
-                <h5 class="mb-0">
-
-                    <i class="fas fa-chart-bar me-2"></i>
-
-                    Career Recommendation Distribution
-
-                </h5>
-
-            </div>
-
-            <div class="card-body">
-
-                <canvas id="careerChart" height="120"></canvas>
-
-            </div>
+            </h2>
 
         </div>
 
@@ -477,27 +268,23 @@
 
     <!-- Support Requests -->
 
-    <div class="col-lg-4 mb-4">
+    <div class="col-lg-3 col-md-6">
 
-        <div class="card">
+        <div class="card stat-card text-center p-4 h-100">
 
-            <div class="card-header bg-success text-white">
+            <i class="fas fa-headset fa-3x text-info mb-3"></i>
 
-                <h5 class="mb-0">
+            <h6 class="text-muted">
 
-                    <i class="fas fa-headset me-2"></i>
+                Pending Support
 
-                    Support Requests
+            </h6>
 
-                </h5>
+            <h2 class="fw-bold">
 
-            </div>
+                {{ pending_requests }}
 
-            <div class="card-body">
-
-                <canvas id="supportChart" height="220"></canvas>
-
-            </div>
+            </h2>
 
         </div>
 
@@ -505,68 +292,344 @@
 
 </div>
 
-<!-- ===================================================== -->
-<!-- FOOTER -->
-<!-- ===================================================== -->
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="text-center mt-5">
+<head>
 
-    <a href="{{ url_for('admin_dashboard') }}"
-       class="btn btn-secondary">
+    <meta charset="UTF-8">
 
-        <i class="fas fa-arrow-left me-2"></i>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-        Back to Dashboard
+    <title>Admin Analytics</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/theme.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body class="{% if session.get('theme') == 'dark' %}dark-mode{% endif %}">
+
+<!-- ======================================================
+SIDEBAR
+====================================================== -->
+
+<div class="sidebar">
+
+    <h3>
+
+        Career Admin
+
+    </h3>
+
+    <a href="{{ url_for('admin_dashboard') }}">
+
+        <i class="fas fa-home"></i>
+
+        Dashboard
 
     </a>
 
-    <hr class="mt-5">
+    <a href="{{ url_for('admin_students') }}">
 
-    <h5 class="text-primary">
+        <i class="fas fa-user-graduate"></i>
+
+        Students
+
+    </a>
+
+    <a href="{{ url_for('admin_manage_careers') }}">
+
+        <i class="fas fa-briefcase"></i>
+
+        Manage Careers
+
+    </a>
+
+    <a href="{{ url_for('admin_assessments') }}">
+
+        <i class="fas fa-file-alt"></i>
+
+        Assessments
+
+    </a>
+
+    <a href="{{ url_for('admin_recommendations') }}">
+
+        <i class="fas fa-robot"></i>
+
+        Recommendations
+
+    </a>
+
+    <a href="{{ url_for('admin_analytics') }}"
+       class="active">
+
+        <i class="fas fa-chart-line"></i>
+
+        Analytics
+
+    </a>
+
+    <a href="{{ url_for('admin_settings') }}">
+
+        <i class="fas fa-cog"></i>
+
+        Settings
+
+    </a>
+
+    <a href="{{ url_for('admin_logout') }}">
+
+        <i class="fas fa-sign-out-alt"></i>
+
+        Logout
+
+    </a>
+
+</div>
+
+<!-- ======================================================
+MAIN CONTENT
+====================================================== -->
+
+<div class="main">
+
+<!-- ======================================================
+TOP BAR
+====================================================== -->
+
+<div class="topbar">
+
+    <div>
+
+        <h3>
+
+            System Analytics
+
+        </h3>
+
+        <p class="text-muted">
+
+            Overall statistics and reports for the Career Recommendation System.
+
+        </p>
+
+    </div>
+
+    <div class="admin-profile">
+
+        <img src="https://ui-avatars.com/api/?name={{ session.admin_username }}&background=23408e&color=fff">
+
+        <div>
+
+            <strong>
+
+                {{ session.admin_username }}
+
+            </strong>
+
+            <br>
+
+            <small class="text-muted">
+
+                Administrator
+
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ======================================================
+FLASH MESSAGE
+====================================================== -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+{% for category, message in messages %}
+
+<div class="alert alert-{{ category }} alert-dismissible fade show">
+
+    {{ message }}
+
+    <button
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endwith %}
+
+<!-- ======================================================
+SUMMARY CARDS
+====================================================== -->
+
+<div class="row g-4 mb-5">
+
+    <!-- Students -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card stat-card text-center p-4 h-100">
+
+            <i class="fas fa-user-graduate fa-3x text-primary mb-3"></i>
+
+            <h6 class="text-muted">
+
+                Total Students
+
+            </h6>
+
+            <h2 class="fw-bold">
+
+                {{ total_students }}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <!-- Careers -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card stat-card text-center p-4 h-100">
+
+            <i class="fas fa-briefcase fa-3x text-success mb-3"></i>
+
+            <h6 class="text-muted">
+
+                Career Paths
+
+            </h6>
+
+            <h2 class="fw-bold">
+
+                {{ total_careers }}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <!-- Assessments -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card stat-card text-center p-4 h-100">
+
+            <i class="fas fa-file-alt fa-3x text-warning mb-3"></i>
+
+            <h6 class="text-muted">
+
+                Assessments
+
+            </h6>
+
+            <h2 class="fw-bold">
+
+                {{ total_assessments }}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <!-- Support Requests -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card stat-card text-center p-4 h-100">
+
+            <i class="fas fa-headset fa-3x text-info mb-3"></i>
+
+            <h6 class="text-muted">
+
+                Pending Support
+
+            </h6>
+
+            <h2 class="fw-bold">
+
+                {{ pending_requests }}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================================================
+FOOTER
+========================================================== -->
+
+<footer class="text-center mt-5">
+
+    <hr>
+
+    <p class="text-muted mb-1">
 
         Career Recommendation System
 
-    </h5>
+    </p>
 
-    <p class="text-muted">
+    <p class="text-muted mb-1">
 
-        Administrator Analytics Dashboard
+        Administrator Panel
 
     </p>
 
     <p class="text-muted">
 
-        Department of Computer Science
+        Department of Computer Science • Ahmadu Bello University • Final Year Project • 2026
 
     </p>
 
-    <p class="text-muted">
-
-        Ahmadu Bello University • Final Year Project • 2026
-
-    </p>
+</footer>
 
 </div>
+<!-- END MAIN -->
 
-</div>
-
-<!-- ===================================================== -->
-<!-- BOOTSTRAP -->
-<!-- ===================================================== -->
+<!-- ==========================================================
+BOOTSTRAP
+========================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- ===================================================== -->
-<!-- CHARTS -->
-<!-- ===================================================== -->
+<!-- ==========================================================
+CAREER DISTRIBUTION CHART
+========================================================== -->
 
 <script>
 
-// -----------------------------------------------------
-// Career Recommendation Chart
-// -----------------------------------------------------
-
-const careerCtx = document.getElementById("careerChart");
+const careerCtx = document.getElementById("careerChart").getContext("2d");
 
 new Chart(careerCtx, {
 
@@ -576,8 +639,10 @@ new Chart(careerCtx, {
 
         labels: [
 
-            {% for career in career_chart %}
-                "{{ career[0] }}",
+            {% for row in career_chart %}
+
+                "{{ row.career_name }}",
+
             {% endfor %}
 
         ],
@@ -588,25 +653,17 @@ new Chart(careerCtx, {
 
             data: [
 
-                {% for career in career_chart %}
-                    {{ career[1] }},
+                {% for row in career_chart %}
+
+                    {{ row.total }},
+
                 {% endfor %}
 
             ],
 
-            backgroundColor: [
+            backgroundColor: "#23408e",
 
-                "#23408e",
-                "#28a745",
-                "#ff9800",
-                "#dc3545",
-                "#6f42c1",
-                "#17a2b8",
-                "#20c997"
-
-            ],
-
-            borderRadius:8
+            borderRadius: 8
 
         }]
 
@@ -614,25 +671,27 @@ new Chart(careerCtx, {
 
     options: {
 
-        responsive:true,
+        responsive: true,
 
-        plugins:{
+        plugins: {
 
-            legend:{
-                display:false
+            legend: {
+
+                display: false
+
             }
 
         },
 
-        scales:{
+        scales: {
 
-            y:{
+            y: {
 
-                beginAtZero:true,
+                beginAtZero: true,
 
-                ticks:{
+                ticks: {
 
-                    precision:0
+                    precision: 0
 
                 }
 
@@ -644,19 +703,23 @@ new Chart(careerCtx, {
 
 });
 
-// -----------------------------------------------------
-// Support Requests Chart
-// -----------------------------------------------------
+</script>
 
-const supportCtx = document.getElementById("supportChart");
+<!-- ==========================================================
+SUPPORT REQUEST CHART
+========================================================== -->
 
-new Chart(supportCtx,{
+<script>
 
-    type:"doughnut",
+const supportCtx = document.getElementById("supportChart").getContext("2d");
 
-    data:{
+new Chart(supportCtx, {
 
-        labels:[
+    type: "doughnut",
+
+    data: {
+
+        labels: [
 
             "Pending",
 
@@ -664,9 +727,9 @@ new Chart(supportCtx,{
 
         ],
 
-        datasets:[{
+        datasets: [{
 
-            data:[
+            data: [
 
                 {{ pending_requests }},
 
@@ -674,7 +737,7 @@ new Chart(supportCtx,{
 
             ],
 
-            backgroundColor:[
+            backgroundColor: [
 
                 "#ffc107",
 
@@ -682,21 +745,21 @@ new Chart(supportCtx,{
 
             ],
 
-            borderWidth:0
+            borderWidth: 0
 
         }]
 
     },
 
-    options:{
+    options: {
 
-        responsive:true,
+        responsive: true,
 
-        plugins:{
+        plugins: {
 
-            legend:{
+            legend: {
 
-                position:"bottom"
+                position: "bottom"
 
             }
 
@@ -708,5 +771,24 @@ new Chart(supportCtx,{
 
 </script>
 
+<!-- ==========================================================
+AUTO CLOSE FLASH MESSAGES
+========================================================== -->
+
+<script>
+
+setTimeout(function(){
+
+    document.querySelectorAll(".alert").forEach(function(alert){
+
+        bootstrap.Alert.getOrCreateInstance(alert).close();
+
+    });
+
+},3000);
+
+</script>
+
 </body>
+
 </html>

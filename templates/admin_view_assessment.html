@@ -228,7 +228,7 @@ Full Name
 
 <br>
 
-{{ assessment.full_name }}
+{{ student.full_name }}
 
 </div>
 
@@ -242,7 +242,7 @@ Email
 
 <br>
 
-{{ assessment.email }}
+{{ student.email }}
 
 </div>
 
@@ -256,7 +256,7 @@ Department
 
 <br>
 
-{{ assessment.department }}
+{{ student.department }}
 
 </div>
 
@@ -270,7 +270,7 @@ Level
 
 <br>
 
-{{ assessment.level }}
+{{ student.level }}
 
 </div>
 
@@ -280,30 +280,41 @@ Level
 
 
 <!-- ==========================================================
-     ACADEMIC & SOFT SKILLS
+     SKILLS ASSESSMENT
 ========================================================== -->
 
 <div class="section-title">
-
-Academic & Soft Skills
-
+Skills Assessment
 </div>
 
 <table class="table table-bordered">
 
+<thead>
 <tr>
 
-<th>
+<th>Skill</th>
+<th>Score</th>
 
-Programming
+</tr>
+</thead>
 
-</th>
+
+<tbody>
+
+{% for skill in skills %}
+
+<tr>
+
+<td>
+{{ skill.skill_name }}
+</td>
+
 
 <td>
 
 <span class="badge badge-score">
 
-{{ assessment.programming }}/5
+{{ skill.score }}/5
 
 </span>
 
@@ -311,385 +322,91 @@ Programming
 
 </tr>
 
-<tr>
+{% endfor %}
 
-<th>
 
-Mathematics
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.mathematics }}/5
-
-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<th>
-
-Communication
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.communication }}/5
-
-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<th>
-
-Leadership
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.leadership }}/5
-
-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<th>
-
-Creativity
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.creativity }}/5
-
-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<th>
-
-Problem Solving
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.problem_solving }}/5
-
-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<th>
-
-Teamwork
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.teamwork }}/5
-
-</span>
-
-</td>
-
-</tr>
+</tbody>
 
 </table>
 
 <!-- ==========================================================
-     INTERESTS & PERSONALITY
+     INTERESTS ASSESSMENT
 ========================================================== -->
 
 <div class="section-title">
 
-Interests & Personality
+Interest Assessment
 
 </div>
+
 
 <table class="table table-bordered">
 
+
+<thead>
+
 <tr>
 
-<th>
+<th>Interest</th>
 
-Technology Interest
+<th>Score</th>
 
-</th>
+</tr>
+
+</thead>
+
+
+<tbody>
+
+
+{% for interest in interests %}
+
+
+<tr>
+
+
+<td>
+
+{{ interest.interest_name }}
+
+</td>
+
 
 <td>
 
 <span class="badge badge-score">
 
-{{ assessment.technology_interest }}/5
+{{ interest.score }}/5
 
 </span>
 
 </td>
 
-</tr>
-
-<tr>
-
-<th>
-
-Business Interest
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.business_interest }}/5
-
-</span>
-
-</td>
 
 </tr>
 
-<tr>
 
-<th>
+{% endfor %}
 
-Healthcare Interest
 
-</th>
+</tbody>
 
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.healthcare_interest }}/5
-
-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<th>
-
-Analytical Thinking
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.analytical_thinking }}/5
-
-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<th>
-
-Research Interest
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.research_interest }}/5
-
-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<th>
-
-Public Speaking
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.public_speaking }}/5
-
-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<th>
-
-Entrepreneurship
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.entrepreneurship }}/5
-
-</span>
-
-</td>
-
-</tr>
-
-<tr>
-
-<th>
-
-Attention to Detail
-
-</th>
-
-<td>
-
-<span class="badge badge-score">
-
-{{ assessment.attention_to_detail }}/5
-
-</span>
-
-</td>
-
-</tr>
 
 </table>
 
-<!-- ==========================================================
-     RECOMMENDATION
-========================================================== -->
-
 <div class="section-title">
 
-Recommendation Summary
+Career Recommendations
 
 </div>
 
-<div class="info-box">
 
-<div class="row">
+<a href="{{ url_for('admin_recommendations') }}"
+class="btn btn-primary">
 
-<div class="col-md-6 mb-3">
+View Generated Recommendations
 
-<strong>
-
-Overall Score
-
-</strong>
-
-<br><br>
-
-<span class="badge bg-primary fs-6">
-
-{{ assessment.overall_score }}
-
-</span>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<strong>
-
-Top Career
-
-</strong>
-
-<br><br>
-
-{{ assessment.top_career }}
-
-</div>
-
-<div class="col-md-6">
-
-<strong>
-
-Final Recommendation
-
-</strong>
-
-<br><br>
-
-{{ assessment.recommendation }}
-
-</div>
-
-<div class="col-md-6">
-
-<strong>
-
-Assessment Date
-
-</strong>
-
-<br><br>
-
-{{ assessment.assessment_date.strftime('%d %B %Y %I:%M %p') }}
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
+</a>
 
 <!-- ==========================================================
      BOOTSTRAP JAVASCRIPT

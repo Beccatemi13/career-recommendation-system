@@ -1210,8 +1210,7 @@ def admin_add_career():
             certifications,
             learning_platforms,
             skills_to_improve,
-            related_careers,
-            salary_range,
+            related_careers,            
             career_outlook
         )
 
@@ -1246,8 +1245,7 @@ def admin_add_career():
             request.form["certifications"],
             request.form["learning_platforms"],
             request.form["skills_to_improve"],
-            request.form["related_careers"],
-            request.form["salary_range"],
+            request.form["related_careers"],            
             request.form["career_outlook"]
 
         ))
@@ -1295,7 +1293,7 @@ def admin_manage_careers():
                 industries,
                 career_outlook,
                 minimum_qualification,
-                salary_note
+                
 
             FROM careers
 
@@ -1341,7 +1339,7 @@ def admin_manage_careers():
                 industries,
                 career_outlook,
                 minimum_qualification,
-                salary_note
+            
 
             FROM careers
 
@@ -1396,8 +1394,7 @@ def admin_edit_career(career_id):
             industries=%s,
             career_outlook=%s,
             minimum_qualification=%s,
-            average_study_years=%s,
-            salary_note=%s,
+            average_study_years=%s,           
             did_you_know=%s
 
         WHERE id=%s
@@ -1418,8 +1415,7 @@ def admin_edit_career(career_id):
             request.form.get("industries"),
             request.form.get("career_outlook"),
             request.form.get("minimum_qualification"),
-            request.form.get("average_study_years"),
-            request.form.get("salary_note"),
+            request.form.get("average_study_years"),           
             request.form.get("did_you_know"),
             career_id
 
@@ -1465,8 +1461,7 @@ def admin_view_student(student_id):
             id,
             full_name,
             email,
-            gender,
-            date_of_birth,
+            gender,            
             department,
             level,
             profile_picture
@@ -2279,8 +2274,7 @@ def admin_view_recommendation(student_id):
             careers.career_name,
             careers.career_field,
             careers.description,
-            careers.minimum_qualification,
-            careers.salary_note,
+            careers.minimum_qualification,            
             careers.career_outlook
 
         FROM recommendations
@@ -3542,9 +3536,7 @@ def recommendation():
 
                 minimum_qualification,
 
-                average_study_years,
-
-                salary_note,
+                average_study_years,                
 
                 did_you_know
 
@@ -3644,9 +3636,7 @@ def recommendation():
 
             "minimum_qualification": career[13],
 
-            "average_study_years": career[14],
-
-            "salary_note": career[15],
+            "average_study_years": career[14],            
 
             "did_you_know": career[16],
 
@@ -3932,9 +3922,7 @@ def download_pdf():
 
             c.minimum_qualification,
 
-            c.average_study_years,
-
-            c.salary_note,
+            c.average_study_years,            
 
             c.did_you_know
 
@@ -4065,8 +4053,7 @@ def download_pdf():
             industries,
             outlook,
             qualification,
-            study_years,
-            salary,
+            study_years,            
             fact
         ) = rec
 
@@ -4174,14 +4161,7 @@ def download_pdf():
                 normal
             )
         )
-
-        story.append(
-            Paragraph(
-                f"<b>Salary Information:</b> {salary}",
-                normal
-            )
-        )
-
+        
         story.append(
             Paragraph(
                 f"<b>Did You Know?</b> {fact}",
