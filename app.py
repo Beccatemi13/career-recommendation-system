@@ -935,93 +935,85 @@ def admin_logout():
 
 @app.route("/admin/dashboard")
 def admin_dashboard():
-    
-    if "admin_id" not in session:
 
+    if "admin_id" not in session:
         return redirect(url_for("admin_login"))
 
     cursor = mysql.connection.cursor()
 
-    # --------------------------------------------------------
+    # ============================================================
     # SUMMARY COUNTS
-    # --------------------------------------------------------
+    # ============================================================
 
-    cursor.execute("SELECT COUNT(*) FROM students")
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM students
+    """)
     total_students = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT(*) FROM careers")
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM careers
+    """)
     total_careers = cursor.fetchone()[0]
 
     cursor.execute("""
-
-    SELECT COUNT(DISTINCT student_id)
-
-    FROM student_skill_assessment
-
+        SELECT COUNT(DISTINCT student_id)
+        FROM student_skill_assessment
     """)
-
     total_assessments = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT(*) FROM recommendations")
+    cursor.execute("""
+        SELECT COUNT(DISTINCT student_id)
+        FROM recommendations
+    """)
     total_recommendations = cursor.fetchone()[0]
 
-    # --------------------------------------------------------
+    # ============================================================
     # CAREER RECOMMENDATION CHART
-    # --------------------------------------------------------
+    # ============================================================
 
     cursor.execute("""
-    SELECT
-        careers.career_name,
-        COUNT(*) AS total
-    FROM recommendations
-    JOIN careers
-    ON recommendations.career_id = careers.id
-    GROUP BY careers.career_name
-    ORDER BY total DESC    
+        SELECT
+            careers.career_name,
+            COUNT(*) AS total
+
+        FROM recommendations
+
+        JOIN careers
+            ON recommendations.career_id = careers.id
+
+        GROUP BY careers.career_name
+
+        ORDER BY total DESC
     """)
 
     career_chart = cursor.fetchall()
 
-    # --------------------------------------------------------
-    # SUPPORT REQUEST STATUS CHART
-    # --------------------------------------------------------
+    # ============================================================
+    # SUPPORT REQUEST STATUS
+    # ============================================================
 
     cursor.execute("""
-
-        SELECT
-
-            COUNT(*)
-
+        SELECT COUNT(*)
         FROM support_requests
-
-        WHERE status='Pending'
-
+        WHERE status = 'Pending'
     """)
-
     pending_requests = cursor.fetchone()[0]
 
     cursor.execute("""
-
-        SELECT
-
-            COUNT(*)
-
+        SELECT COUNT(*)
         FROM support_requests
-
-        WHERE status='Resolved'
-
+        WHERE status = 'Resolved'
     """)
-
     resolved_requests = cursor.fetchone()[0]
 
-    # --------------------------------------------------------
-    # RECENT REGISTERED STUDENTS
-    # --------------------------------------------------------
+    # ============================================================
+    # RECENTLY REGISTERED STUDENTS
+    # ============================================================
 
     cursor.execute("""
-
         SELECT
-
             full_name,
             email,
             department,
@@ -1033,41 +1025,35 @@ def admin_dashboard():
         ORDER BY created_at DESC
 
         LIMIT 5
-
     """)
 
     latest_students = cursor.fetchall()
 
-    # --------------------------------------------------------
-    # RECENT ASSESSMENTS
-    # --------------------------------------------------------
+    # ============================================================
+    # RECENT ASSESSMENTS (TOP RECOMMENDATION ONLY)
+    # ============================================================
 
     cursor.execute("""
+        SELECT
+            students.full_name,
+            students.department,
+            careers.career_name,
+            recommendations.match_percentage,
+            recommendations.generated_at
 
-    SELECT
+        FROM recommendations
 
-        students.full_name,
+        JOIN students
+            ON students.id = recommendations.student_id
 
-        careers.career_name,
+        JOIN careers
+            ON careers.id = recommendations.career_id
 
-        recommendations.match_percentage,
+        WHERE recommendations.rank_position = 1
 
-        recommendations.generated_at
+        ORDER BY recommendations.generated_at DESC
 
-    FROM recommendations
-
-    JOIN students
-    ON recommendations.student_id = students.id
-
-    JOIN careers
-    ON recommendations.career_id = careers.id
-
-    WHERE recommendations.rank_position = 1
-
-    ORDER BY recommendations.generated_at DESC
-
-    LIMIT 5
-
+        LIMIT 5
     """)
 
     recent_assessments = cursor.fetchall()
@@ -1075,30 +1061,23 @@ def admin_dashboard():
     cursor.close()
 
     return render_template(
-
         "admin_dashboard.html",
 
         total_students=total_students,
-
         total_careers=total_careers,
-
         total_assessments=total_assessments,
-
         total_recommendations=total_recommendations,
 
         career_chart=career_chart,
 
         pending_requests=pending_requests,
-
         resolved_requests=resolved_requests,
 
         latest_students=latest_students,
-
         recent_assessments=recent_assessments
-
     )
 
-  
+
 # ============================================================
 # ADMIN PROFILE
 # ============================================================

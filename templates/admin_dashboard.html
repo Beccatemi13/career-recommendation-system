@@ -1,339 +1,146 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
 
-<title>Administrator Dashboard</title>
+    <title>Administrator Dashboard</title>
 
-<link
-href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-<link
-rel="stylesheet"
-href="{{ url_for('static', filename='css/theme.css') }}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/theme.css') }}">
 
-<link
-rel="stylesheet"
-href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin.css') }}">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ChartJS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
 <body class="{% if session.get('theme') == 'dark' %}dark-mode{% endif %}">
 
-<!-- ==========================================
+<!-- ==========================================================
 SIDEBAR
-========================================== -->
+=========================================================== -->
 
 <div class="sidebar">
 
     <h2 class="logo">
-
         <i class="fas fa-robot"></i>
-
         Career Admin
-
     </h2>
 
-    <a href="{{ url_for('admin_dashboard') }}">
-
+    <a href="{{ url_for('admin_dashboard') }}" class="active">
         <i class="fas fa-home"></i>
-
         Dashboard
-
     </a>
 
     <a href="{{ url_for('admin_students') }}">
-
         <i class="fas fa-user-graduate"></i>
-
         Students
-
     </a>
 
     <a href="{{ url_for('admin_manage_careers') }}">
-
         <i class="fas fa-briefcase"></i>
-
         Manage Careers
-
     </a>
 
     <a href="{{ url_for('admin_add_career') }}">
-
         <i class="fas fa-plus-circle"></i>
-
         Add Career
+    </a>
 
+    <a href="{{ url_for('admin_assessments') }}">
+        <i class="fas fa-file-alt"></i>
+        Assessments
+    </a>
+
+    <a href="{{ url_for('admin_recommendations') }}">
+        <i class="fas fa-robot"></i>
+        Recommendations
     </a>
 
     <a href="{{ url_for('admin_analytics') }}">
-
         <i class="fas fa-chart-line"></i>
-
         Analytics
-
     </a>
 
     <a href="{{ url_for('admin_settings') }}">
-
         <i class="fas fa-cog"></i>
-
         Settings
-
     </a>
 
     <a href="{{ url_for('admin_change_password') }}">
-
         <i class="fas fa-key"></i>
-
         Change Password
-
     </a>
 
     <a href="{{ url_for('admin_support_requests') }}">
-
-<i class="fas fa-headset"></i>
-
-Support Requests
-
-</a>
+        <i class="fas fa-headset"></i>
+        Support Requests
+    </a>
 
     <a href="{{ url_for('admin_logout') }}">
-
         <i class="fas fa-right-from-bracket"></i>
-
         Logout
-
     </a>
 
 </div>
 
-<!-- ==========================================
+<!-- ==========================================================
 MAIN CONTENT
-========================================== -->
+=========================================================== -->
 
 <div class="main">
 
-<!-- TOP BAR -->
+    <!-- ======================================================
+    TOPBAR
+    ======================================================= -->
 
-<div class="topbar">
-
-    <div>
-
-        <h2>
-
-            Administrator Dashboard
-
-        </h2>
-
-        <small class="text-muted">
-
-            Career Recommendation System
-
-        </small>
-
-    </div>
-
-    <div class="admin-profile">
-
-        <img
-
-        src="https://ui-avatars.com/api/?name={{ session.admin_username }}&background=23408e&color=fff">
+    <div class="topbar">
 
         <div>
 
-            <strong>
-
-                {{ session.admin_username }}
-
-            </strong>
-
-            <br>
+            <h2>Administrator Dashboard</h2>
 
             <small class="text-muted">
 
-                System Administrator
+                Career Recommendation System
 
             </small>
 
         </div>
 
-    </div>
+        <div class="admin-profile">
 
-</div>
+            <img src="https://ui-avatars.com/api/?name={{ session.admin_username }}&background=23408e&color=fff">
 
-<!-- FLASH MESSAGES -->
+            <div>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
+                <strong>
 
-{% if messages %}
+                    {{ session.admin_username }}
 
-{% for category, message in messages %}
+                </strong>
 
-<div class="alert alert-{{ category }} alert-dismissible fade show">
+                <br>
 
-    {{ message }}
+                <small class="text-muted">
 
-    <button
-    class="btn-close"
-    data-bs-dismiss="alert">
-    </button>
-
-</div>
-
-{% endfor %}
-
-{% endif %}
-
-{% endwith %}
-
-<!-- ==========================================
-WELCOME CARD
-========================================== -->
-
-<div class="welcome-card">
-
-    <h2>
-
-        Welcome Back,
-
-        {{ session.admin_username }}
-
-        👋
-
-    </h2>
-
-    <p>
-
-        Manage careers, students, assessments and analytics
-        from one centralized dashboard.
-
-    </p>
-
-</div>
-
-<!-- ==========================================
-STATISTICS CARDS
-========================================== -->
-
-<div class="row g-4 mt-2">
-
-    <!-- Students -->
-
-    <div class="col-xl-3 col-md-6">
-
-        <a href="{{ url_for('admin_students') }}"
-           class="text-decoration-none">
-
-            <div class="card stat-card h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="fas fa-user-graduate fa-3x text-primary mb-3"></i>
-
-                    <h6 class="text-muted">
-
-                        Total Students
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        {{ total_students }}
-
-                    </h2>
-
-                    <small class="text-success">
-
-                        Registered Students
-
-                    </small>
-
-                </div>
-
-            </div>
-
-        </a>
-
-    </div>
-
-    <!-- Careers -->
-
-    <div class="col-xl-3 col-md-6">
-
-        <a href="{{ url_for('admin_manage_careers') }}"
-           class="text-decoration-none">
-
-            <div class="card stat-card h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="fas fa-briefcase fa-3x text-success mb-3"></i>
-
-                    <h6 class="text-muted">
-
-                        Total Careers
-
-                    </h6>
-
-                    <h2 class="fw-bold">
-
-                        {{ total_careers }}
-
-                    </h2>
-
-                    <small class="text-success">
-
-                        Career Profiles
-
-                    </small>
-
-                </div>
-
-            </div>
-
-        </a>
-
-    </div>
-
-    <!-- Assessments -->
-
-    <div class="col-xl-3 col-md-6">
-
-        <div class="card stat-card h-100">
-
-            <div class="card-body text-center">
-
-                <i class="fas fa-file-alt fa-3x text-warning mb-3"></i>
-
-                <h6 class="text-muted">
-
-                    Assessments
-
-                </h6>
-
-                <h2 class="fw-bold">
-
-                    {{ total_assessments }}
-
-                </h2>
-
-                <small class="text-warning">
-
-                    Completed Assessments
+                    System Administrator
 
                 </small>
 
@@ -343,711 +150,825 @@ STATISTICS CARDS
 
     </div>
 
-    <!-- Recommendations -->
+    <!-- ======================================================
+    FLASH MESSAGES
+    ======================================================= -->
 
-    <div class="col-xl-3 col-md-6">
+    {% with messages = get_flashed_messages(with_categories=true) %}
 
-        <div class="card stat-card h-100">
+        {% if messages %}
 
-            <div class="card-body text-center">
+            {% for category, message in messages %}
 
-                <i class="fas fa-robot fa-3x text-danger mb-3"></i>
+                <div class="alert alert-{{ category }} alert-dismissible fade show">
 
-                <h6 class="text-muted">
+                    {{ message }}
 
-                    Recommendations
-
-                </h6>
-
-                <h2 class="fw-bold">
-
-                    {{ total_assessments }}
-
-                </h2>
-
-                <small class="text-danger">
-
-                    Generated Reports
-
-                </small>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ==========================================
-QUICK ACTIONS
-========================================== -->
-
-<h3 class="mt-5 mb-4">
-
-    Quick Actions
-
-</h3>
-
-<div class="row g-4">
-
-    <!-- Add Career -->
-
-    <div class="col-lg-3 col-md-6">
-
-        <a href="{{ url_for('admin_add_career') }}"
-           class="text-decoration-none">
-
-            <div class="card action-card h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
-
-                    <h5>
-
-                        Add Career
-
-                    </h5>
-
-                    <p class="text-muted">
-
-                        Create a new career profile.
-
-                    </p>
+                    <button class="btn-close"
+                            data-bs-dismiss="alert">
+                    </button>
 
                 </div>
-
-            </div>
-
-        </a>
-
-    </div>
-
-    <!-- Manage Careers -->
-
-    <div class="col-lg-3 col-md-6">
-
-        <a href="{{ url_for('admin_manage_careers') }}"
-           class="text-decoration-none">
-
-            <div class="card action-card h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="fas fa-edit fa-3x text-primary mb-3"></i>
-
-                    <h5>
-
-                        Manage Careers
-
-                    </h5>
-
-                    <p class="text-muted">
-
-                        Edit and remove careers.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </a>
-
-    </div>
-
-    <!-- Students -->
-
-    <div class="col-lg-3 col-md-6">
-
-        <a href="{{ url_for('admin_students') }}"
-           class="text-decoration-none">
-
-            <div class="card action-card h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="fas fa-users fa-3x text-info mb-3"></i>
-
-                    <h5>
-
-                        Students
-
-                    </h5>
-
-                    <p class="text-muted">
-
-                        View registered students.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </a>
-
-    </div>
-
-    <!-- Analytics -->
-
-    <div class="col-lg-3 col-md-6">
-
-        <a href="{{ url_for('admin_analytics') }}"
-           class="text-decoration-none">
-
-            <div class="card action-card h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
-
-                    <h5>
-
-                        Analytics
-
-                    </h5>
-
-                    <p class="text-muted">
-
-                        View system statistics.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </a>
-
-    </div>
-
-</div>
-
-<!-- ==========================================
-RECENT STUDENTS & RECENT ASSESSMENTS
-========================================== -->
-
-<div class="row mt-5">
-
-    <!-- Recent Students -->
-
-    <div class="col-lg-6 mb-4">
-
-        <div class="card shadow-sm border-0 rounded-4 h-100">
-
-            <div class="card-header bg-primary text-white">
-
-                <h5 class="mb-0">
-
-                    <i class="fas fa-user-graduate me-2"></i>
-
-                    Recently Registered Students
-
-                </h5>
-
-            </div>
-
-            <div class="card-body p-0">
-
-                <div class="table-responsive">
-
-                    <table class="table table-hover align-middle mb-0">
-
-                        <thead class="table-light">
-
-                            <tr>
-
-                                <th>Name</th>
-
-                                <th>Department</th>
-
-                                <th>Level</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                        {% if latest_students %}
-
-                            {% for student in latest_students %}
-
-                            <tr>
-
-                                <td>
-
-                                    {{ student[0] }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ student[1] }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ student[2] }}
-
-                                </td>
-
-                            </tr>
-
-                            {% endfor %}
-
-                        {% else %}
-
-                            <tr>
-
-                                <td colspan="3" class="text-center text-muted py-4">
-
-                                    No students found.
-
-                                </td>
-
-                            </tr>
-
-                        {% endif %}
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Recent Assessments -->
-
-    <div class="col-lg-6 mb-4">
-
-        <div class="card shadow-sm border-0 rounded-4 h-100">
-
-            <div class="card-header bg-success text-white">
-
-                <h5 class="mb-0">
-
-                    <i class="fas fa-file-alt me-2"></i>
-
-                    Latest Assessments
-
-                </h5>
-
-            </div>
-
-            <div class="card-body p-0">
-
-                <div class="table-responsive">
-
-                    <table class="table table-hover align-middle mb-0">
-
-                        <thead class="table-light">
-
-                            <tr>
-
-                                <th>Student</th>
-
-                                <th>Department</th>
-
-                                <th>Top Career</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                        {% if recent_assessments %}
-
-                            {% for assessment in recent_assessments %}
-
-                            <tr>
-
-                                <td>
-
-                                    {{ assessment[0] }}
-
-                                </td>
-
-                                <td>
-
-                                    {{ assessment[1] }}
-
-                                </td>
-
-                                <td>
-
-                                    <span class="badge bg-primary">
-
-                                        {{ assessment[2] }}
-
-                                    </span>
-
-                                </td>
-
-                            </tr>
-
-                            {% endfor %}
-
-                        {% else %}
-
-                            <tr>
-
-                                <td colspan="3" class="text-center text-muted py-4">
-
-                                    No assessments yet.
-
-                                </td>
-
-                            </tr>
-
-                        {% endif %}
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ==========================================
-SYSTEM SUMMARY
-========================================== -->
-
-<div class="row mt-3">
-
-    <div class="col-lg-12">
-
-        <div class="card border-0 shadow-sm rounded-4">
-
-            <div class="card-body">
-
-               
-<!-- ==========================================
-CAREER ANALYTICS
-========================================== -->
-
-<div class="row mt-5">
-
-    <!-- Career Recommendation Distribution -->
-
-    <div class="col-lg-8 mb-4">
-
-        <div class="card shadow-sm border-0 rounded-4">
-
-            <div class="card-header bg-primary text-white">
-
-                <h5 class="mb-0">
-
-                    <i class="fas fa-chart-bar me-2"></i>
-
-                    Career Recommendation Distribution
-
-                </h5>
-
-            </div>
-
-            <div class="card-body">
-
-                <canvas id="careerChart" height="120"></canvas>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Support Requests -->
-
-    <div class="col-lg-4 mb-4">
-
-        <div class="card shadow-sm border-0 rounded-4">
-
-            <div class="card-header bg-success text-white">
-
-                <h5 class="mb-0">
-
-                    <i class="fas fa-headset me-2"></i>
-
-                    Support Requests
-
-                </h5>
-
-            </div>
-
-            <div class="card-body">
-
-                <canvas id="supportChart" height="220"></canvas>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ==========================================
-FOOTER
-========================================== -->
-
-<footer class="text-center mt-5 mb-4">
-
-    <hr>
-
-    <h5 class="text-primary">
-
-        Career Recommendation System
-
-    </h5>
-
-    <p class="text-muted mb-1">
-
-        Administrator Dashboard
-
-    </p>
-
-    <p class="text-muted mb-1">
-
-        Department of Computer Science
-
-    </p>
-
-    <p class="text-muted">
-
-        Ahmadu Bello University • Final Year Project • 2026
-
-    </p>
-
-</footer>
-
-</div>
-<!-- End Main -->
-
-<!-- ==========================================
-BOOTSTRAP
-========================================== -->
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- ==========================================
-CHART
-========================================== -->
-
-<script>
-
-// ==========================================================
-// CAREER RECOMMENDATION BAR CHART
-// ==========================================================
-
-const careerCtx = document.getElementById("careerChart");
-
-
-new Chart(careerCtx, {
-
-
-    type: "bar",
-
-
-    data: {
-
-
-        labels: [
-
-            {% for career in career_chart %}
-
-                "{{ career[0] }}",
 
             {% endfor %}
 
-        ],
+        {% endif %}
 
+    {% endwith %}
 
-        datasets: [
+    <!-- ======================================================
+    WELCOME CARD
+    ======================================================= -->
 
+    <div class="welcome-card">
 
-            {
+        <h2>
 
-                label: "Students",
+            Welcome Back,
 
-                data: [
+            {{ session.admin_username }}
 
-                    {% for career in career_chart %}
+            👋
 
-                        {{ career[1] }},
+        </h2>
 
-                    {% endfor %}
+        <p>
 
-                ],
+            Manage careers, students, assessments, recommendations,
+            analytics and support requests from one centralized dashboard.
 
+        </p>
 
-                backgroundColor: "#23408e",
+    </div>
 
-                borderRadius: 10,
+    <!-- ======================================================
+    STATISTICS CARDS
+    ======================================================= -->
 
-                borderSkipped: false
+    <div class="row g-4 mt-3">
 
-            }
+        <!-- Students -->
 
+        <div class="col-xl-3 col-md-6">
 
-        ]
+            <a href="{{ url_for('admin_students') }}"
+               class="text-decoration-none">
 
+                <div class="card stat-card h-100">
 
-    },
+                    <div class="card-body text-center">
 
+                        <i class="fas fa-user-graduate fa-3x text-primary mb-3"></i>
 
-    options: {
+                        <h6 class="text-muted">
 
+                            Total Students
 
-        responsive: true,
+                        </h6>
 
+                        <h2 class="fw-bold">
 
-        plugins: {
+                            {{ total_students }}
 
+                        </h2>
 
-            legend: {
+                        <small class="text-success">
 
-                display: false
+                            Registered Students
 
-            }
+                        </small>
 
+                    </div>
 
-        },
+                </div>
 
+            </a>
 
-        scales: {
+        </div>
 
+        <!-- Careers -->
 
-            y: {
+        <div class="col-xl-3 col-md-6">
 
+            <a href="{{ url_for('admin_manage_careers') }}"
+               class="text-decoration-none">
 
-                beginAtZero: true,
+                <div class="card stat-card h-100">
 
+                    <div class="card-body text-center">
 
-                ticks: {
+                        <i class="fas fa-briefcase fa-3x text-success mb-3"></i>
 
+                        <h6 class="text-muted">
 
-                    precision: 0
+                            Total Careers
 
-                }
+                        </h6>
 
+                        <h2 class="fw-bold">
 
-            }
+                            {{ total_careers }}
 
+                        </h2>
 
-        }
+                        <small class="text-success">
 
+                            Career Profiles
 
-    }
+                        </small>
 
+                    </div>
 
-});
+                </div>
 
+            </a>
 
-// ==========================================================
-// SUPPORT REQUEST PIE CHART
-// ==========================================================
+        </div>
 
+        <!-- Assessments -->
 
-const supportCtx = document.getElementById("supportChart");
+        <div class="col-xl-3 col-md-6">
 
+            <a href="{{ url_for('admin_assessments') }}"
+               class="text-decoration-none">
 
-new Chart(supportCtx, {
+                <div class="card stat-card h-100">
 
+                    <div class="card-body text-center">
 
-    type: "doughnut",
+                        <i class="fas fa-file-alt fa-3x text-warning mb-3"></i>
 
+                        <h6 class="text-muted">
 
-    data: {
+                            Assessments
 
+                        </h6>
 
-        labels: [
+                        <h2 class="fw-bold">
 
-            "Pending",
+                            {{ total_assessments }}
 
-            "Resolved"
+                        </h2>
 
-        ],
+                        <small class="text-warning">
 
+                            Completed Assessments
 
-        datasets: [
+                        </small>
 
+                    </div>
 
-            {
+                </div>
 
-                data: [
+            </a>
 
-                    {{ pending_requests }},
+        </div>
 
-                    {{ resolved_requests }}
+        <!-- Recommendations -->
 
-                ],
+        <div class="col-xl-3 col-md-6">
 
+            <a href="{{ url_for('admin_recommendations') }}"
+               class="text-decoration-none">
 
-                backgroundColor: [
+                <div class="card stat-card h-100">
 
-                    "#ffc107",
+                    <div class="card-body text-center">
 
-                    "#198754"
+                        <i class="fas fa-robot fa-3x text-danger mb-3"></i>
 
-                ],
+                        <h6 class="text-muted">
 
+                            Recommendations
 
-                borderWidth: 0
+                        </h6>
 
-            }
+                        <h2 class="fw-bold">
 
+                            {{ total_recommendations }}
 
-        ]
+                        </h2>
 
+                        <small class="text-danger">
 
-    },
+                            Students With Recommendations
 
+                        </small>
 
-    options: {
+                    </div>
 
+                </div>
 
-        responsive:true,
+            </a>
 
+        </div>
 
-        plugins:{
+    </div>
 
+        <!-- ======================================================
+    QUICK ACTIONS
+    ======================================================= -->
 
-            legend:{
+    <h3 class="mt-5 mb-4">
 
+        Quick Actions
 
-                position:"bottom"
+    </h3>
 
+    <div class="row g-4">
 
-            }
+        <div class="col-lg-3 col-md-6">
 
+            <a href="{{ url_for('admin_add_career') }}"
+               class="text-decoration-none">
 
-        }
+                <div class="card action-card h-100">
 
+                    <div class="card-body text-center">
 
-    }
+                        <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
 
+                        <h5>Add Career</h5>
 
-});
+                        <p class="text-muted">
 
+                            Create a new career profile.
 
-</script>
+                        </p>
 
-</body>
+                    </div>
 
-</html>
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('admin_manage_careers') }}"
+               class="text-decoration-none">
+
+                <div class="card action-card h-100">
+
+                    <div class="card-body text-center">
+
+                        <i class="fas fa-edit fa-3x text-primary mb-3"></i>
+
+                        <h5>Manage Careers</h5>
+
+                        <p class="text-muted">
+
+                            Edit existing career profiles.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('admin_students') }}"
+               class="text-decoration-none">
+
+                <div class="card action-card h-100">
+
+                    <div class="card-body text-center">
+
+                        <i class="fas fa-users fa-3x text-info mb-3"></i>
+
+                        <h5>Students</h5>
+
+                        <p class="text-muted">
+
+                            View all registered students.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('admin_analytics') }}"
+               class="text-decoration-none">
+
+                <div class="card action-card h-100">
+
+                    <div class="card-body text-center">
+
+                        <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
+
+                        <h5>Analytics</h5>
+
+                        <p class="text-muted">
+
+                            View system reports.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- ======================================================
+    RECENT STUDENTS & RECENT ASSESSMENTS
+    ======================================================= -->
+
+    <div class="row mt-5">
+
+        <!-- Recent Students -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="fas fa-user-graduate me-2"></i>
+
+                        Recently Registered Students
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead class="table-light">
+
+                                <tr>
+
+                                    <th>Name</th>
+
+                                    <th>Department</th>
+
+                                    <th>Level</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% if latest_students %}
+
+                                    {% for student in latest_students %}
+
+                                    <tr>
+
+                                        <td>{{ student[0] }}</td>
+
+                                        <td>{{ student[2] }}</td>
+
+                                        <td>{{ student[3] }}</td>
+
+                                    </tr>
+
+                                    {% endfor %}
+
+                                {% else %}
+
+                                    <tr>
+
+                                        <td colspan="3"
+                                            class="text-center text-muted py-4">
+
+                                            No registered students.
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endif %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Latest Assessments -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                <div class="card-header bg-success text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="fas fa-file-alt me-2"></i>
+
+                        Latest Recommendations
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead class="table-light">
+
+                                <tr>
+
+                                    <th>Student</th>
+
+                                    <th>Top Career</th>
+
+                                    <th>Match %</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% if recent_assessments %}
+
+                                    {% for assessment in recent_assessments %}
+
+                                    <tr>
+
+                                        <td>{{ assessment[0] }}</td>
+
+                                        <td>{{ assessment[2] }}</td>
+
+                                        <td>
+
+                                            <span class="badge bg-primary">
+
+                                                {{ assessment[3] }}%
+
+                                            </span>
+
+                                        </td>
+
+                                    </tr>
+
+                                    {% endfor %}
+
+                                {% else %}
+
+                                    <tr>
+
+                                        <td colspan="3"
+                                            class="text-center text-muted py-4">
+
+                                            No recommendations available.
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endif %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+        <!-- ======================================================
+    QUICK ACTIONS
+    ======================================================= -->
+
+    <h3 class="mt-5 mb-4">
+
+        Quick Actions
+
+    </h3>
+
+    <div class="row g-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('admin_add_career') }}"
+               class="text-decoration-none">
+
+                <div class="card action-card h-100">
+
+                    <div class="card-body text-center">
+
+                        <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
+
+                        <h5>Add Career</h5>
+
+                        <p class="text-muted">
+
+                            Create a new career profile.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('admin_manage_careers') }}"
+               class="text-decoration-none">
+
+                <div class="card action-card h-100">
+
+                    <div class="card-body text-center">
+
+                        <i class="fas fa-edit fa-3x text-primary mb-3"></i>
+
+                        <h5>Manage Careers</h5>
+
+                        <p class="text-muted">
+
+                            Edit existing career profiles.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('admin_students') }}"
+               class="text-decoration-none">
+
+                <div class="card action-card h-100">
+
+                    <div class="card-body text-center">
+
+                        <i class="fas fa-users fa-3x text-info mb-3"></i>
+
+                        <h5>Students</h5>
+
+                        <p class="text-muted">
+
+                            View all registered students.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('admin_analytics') }}"
+               class="text-decoration-none">
+
+                <div class="card action-card h-100">
+
+                    <div class="card-body text-center">
+
+                        <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
+
+                        <h5>Analytics</h5>
+
+                        <p class="text-muted">
+
+                            View system reports.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- ======================================================
+    RECENT STUDENTS & RECENT ASSESSMENTS
+    ======================================================= -->
+
+    <div class="row mt-5">
+
+        <!-- Recent Students -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="fas fa-user-graduate me-2"></i>
+
+                        Recently Registered Students
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead class="table-light">
+
+                                <tr>
+
+                                    <th>Name</th>
+
+                                    <th>Department</th>
+
+                                    <th>Level</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% if latest_students %}
+
+                                    {% for student in latest_students %}
+
+                                    <tr>
+
+                                        <td>{{ student[0] }}</td>
+
+                                        <td>{{ student[2] }}</td>
+
+                                        <td>{{ student[3] }}</td>
+
+                                    </tr>
+
+                                    {% endfor %}
+
+                                {% else %}
+
+                                    <tr>
+
+                                        <td colspan="3"
+                                            class="text-center text-muted py-4">
+
+                                            No registered students.
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endif %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Latest Assessments -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                <div class="card-header bg-success text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="fas fa-file-alt me-2"></i>
+
+                        Latest Recommendations
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0">
+
+                            <thead class="table-light">
+
+                                <tr>
+
+                                    <th>Student</th>
+
+                                    <th>Top Career</th>
+
+                                    <th>Match %</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% if recent_assessments %}
+
+                                    {% for assessment in recent_assessments %}
+
+                                    <tr>
+
+                                        <td>{{ assessment[0] }}</td>
+
+                                        <td>{{ assessment[2] }}</td>
+
+                                        <td>
+
+                                            <span class="badge bg-primary">
+
+                                                {{ assessment[3] }}%
+
+                                            </span>
+
+                                        </td>
+
+                                    </tr>
+
+                                    {% endfor %}
+
+                                {% else %}
+
+                                    <tr>
+
+                                        <td colspan="3"
+                                            class="text-center text-muted py-4">
+
+                                            No recommendations available.
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endif %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
