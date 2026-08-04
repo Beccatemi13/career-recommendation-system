@@ -13,9 +13,8 @@
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-src="{{ get_profile_picture(student.profile_picture) }}"
-
 <style>
+
 body{
 
     background:#f4f7fc;
@@ -103,7 +102,6 @@ body{
 <button
 class="btn-close"
 data-bs-dismiss="alert">
-
 </button>
 
 </div>
@@ -119,33 +117,25 @@ data-bs-dismiss="alert">
 
 <form method="POST" enctype="multipart/form-data">
 
-<div class="row align-items-center">
+<div class="row">
+
+<!-- LEFT SIDE -->
 
 <div class="col-lg-4">
 
 <div class="left-panel text-center">
 
 <img
-
 src="{{ get_profile_picture(student.profile_picture) }}"
-
 class="profile-img mb-4">
 
-<h2>
+<h3>{{ student.full_name }}</h3>
 
-{{ student.full_name }}
-
-</h2>
-
-<p class="text-muted fs-5">
-
-Student
-
-</p>
+<p class="text-muted">Student</p>
 
 <hr>
 
-<div class="mb-3">
+<div class="mb-4">
 
 <label class="form-label">
 
@@ -154,10 +144,10 @@ Change Profile Picture
 </label>
 
 <input
-    type="file"
-    name="profile_picture"
-    class="form-control"
-    accept=".jpg,.jpeg,.png,.gif">
+type="file"
+name="profile_picture"
+class="form-control"
+accept=".jpg,.jpeg,.png,.gif">
 
 </div>
 
@@ -174,12 +164,10 @@ Save Changes
 </button>
 
 <a
-
 href="{{ url_for('profile') }}"
-
 class="btn btn-secondary">
 
-<i class="fas fa-times me-2"></i>
+<i class="fas fa-arrow-left me-2"></i>
 
 Cancel
 
@@ -191,13 +179,15 @@ Cancel
 
 </div>
 
+<!-- RIGHT SIDE -->
+
 <div class="col-lg-8">
 
-<h1 class="page-title mb-5">
+<h2 class="page-title mb-4">
 
 Edit Profile
 
-</h1>
+</h2>
 
 <div class="mb-4">
 
@@ -208,15 +198,10 @@ Full Name
 </label>
 
 <input
-
 type="text"
-
 name="full_name"
-
 class="form-control"
-
 value="{{ student.full_name }}"
-
 required>
 
 </div>
@@ -230,19 +215,15 @@ Gender
 </label>
 
 <select
-
 name="gender"
-
-class="form-select">
+class="form-select"
+required>
 
 <option value="">Select Gender</option>
 
 <option value="Male"
-
 {% if student.gender=="Male" %}
-
 selected
-
 {% endif %}>
 
 Male
@@ -250,11 +231,8 @@ Male
 </option>
 
 <option value="Female"
-
 {% if student.gender=="Female" %}
-
 selected
-
 {% endif %}>
 
 Female
@@ -269,39 +247,15 @@ Female
 
 <label class="form-label">
 
-Department
+Date of Birth
 
 </label>
 
 <input
-
-type="text"
-
+type="date"
+name="date_of_birth"
 class="form-control"
-
-value="{{ student.department }}"
-
-readonly>
-
-</div>
-
-<div class="mb-4">
-
-<label class="form-label">
-
-Level
-
-</label>
-
-<input
-
-type="text"
-
-class="form-control"
-
-value="{{ student.level }}"
-
-readonly>
+value="{{ student.date_of_birth }}">
 
 </div>
 
@@ -336,4 +290,3 @@ bootstrap.Alert.getOrCreateInstance(alert).close();
 </body>
 
 </html>
-

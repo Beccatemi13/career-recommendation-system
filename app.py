@@ -1034,26 +1034,42 @@ def admin_dashboard():
     # ============================================================
 
     cursor.execute("""
-        SELECT
-            students.full_name,
-            students.department,
-            careers.career_name,
-            recommendations.match_percentage,
-            recommendations.generated_at
+    SELECT
 
-        FROM recommendations
+        students.full_name,
 
-        JOIN students
-            ON students.id = recommendations.student_id
+        students.department,
 
-        JOIN careers
-            ON careers.id = recommendations.career_id
+        careers.career_name,
 
-        WHERE recommendations.rank_position = 1
+        recommendations.match_percentage,
 
-        ORDER BY recommendations.generated_at DESC
+        DATE(MAX(student_skill_assessment.assessment_date)) AS assessment_date
 
-        LIMIT 5
+    FROM recommendations
+
+    JOIN students
+    ON students.id = recommendations.student_id
+
+    JOIN careers
+    ON careers.id = recommendations.career_id
+
+    JOIN student_skill_assessment
+    ON student_skill_assessment.student_id = students.id
+
+    WHERE recommendations.rank_position = 1
+
+    GROUP BY
+
+        students.id,
+        students.full_name,
+        students.department,
+        careers.career_name,
+        recommendations.match_percentage
+
+    ORDER BY assessment_date DESC
+
+    LIMIT 5
     """)
 
     recent_assessments = cursor.fetchall()
@@ -2314,8 +2330,7 @@ def edit_profile():
 
         full_name = request.form["full_name"]
         gender = request.form["gender"]
-        date_of_birth = request.form["date_of_birth"]
-
+        
         # Keep existing picture by default
         cursor.execute(
             "SELECT profile_picture FROM students WHERE id=%s",
@@ -2346,8 +2361,7 @@ def edit_profile():
             SET
 
                 full_name=%s,
-                gender=%s,
-                date_of_birth=%s,
+                gender=%s,            
                 profile_picture=%s
 
             WHERE id=%s
@@ -2355,8 +2369,7 @@ def edit_profile():
         """, (
 
             full_name,
-            gender,
-            date_of_birth,
+            gender,            
             profile_picture,
             session["user_id"]
 
@@ -2382,8 +2395,7 @@ def edit_profile():
         SELECT
 
             full_name,
-            gender,
-            date_of_birth,
+            gender,           
             profile_picture
 
         FROM students
@@ -3969,6 +3981,7 @@ def contact_admin():
         "contact_admin.html"
 
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True) 
