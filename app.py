@@ -1802,8 +1802,7 @@ def admin_assessments():
             students.level,
 
             MIN(student_skill_assessment.assessment_date) AS assessment_date
-            AS assessment_date,
-
+            
             COUNT(DISTINCT student_skill_assessment.skill_id)
             AS total_skills,
 
