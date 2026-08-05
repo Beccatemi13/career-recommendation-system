@@ -1395,8 +1395,7 @@ def admin_edit_career(career_id):
             career_outlook=%s,
             minimum_qualification=%s,
             average_study_years=%s,           
-            did_you_know=%s
-
+           
         WHERE id=%s
 
         """, (
@@ -1415,8 +1414,8 @@ def admin_edit_career(career_id):
             request.form.get("industries"),
             request.form.get("career_outlook"),
             request.form.get("minimum_qualification"),
-            request.form.get("average_study_years"),           
-            request.form.get("did_you_know"),
+            request.form.get("average_study_years"),     
+           
             career_id
 
         ))
@@ -3536,10 +3535,9 @@ def recommendation():
 
                 minimum_qualification,
 
-                average_study_years,                
+                average_study_years            
 
-                did_you_know
-
+                
             FROM careers
 
             WHERE id = %s
@@ -3636,9 +3634,8 @@ def recommendation():
 
             "minimum_qualification": career[13],
 
-            "average_study_years": career[14],            
-
-            "did_you_know": career[16],
+            "average_study_years": career[14],         
+           
 
             "score": rec["score"],
 
@@ -3924,8 +3921,6 @@ def download_pdf():
 
             c.average_study_years,            
 
-            c.did_you_know
-
         FROM recommendations r
 
         JOIN careers c
@@ -4161,14 +4156,7 @@ def download_pdf():
                 normal
             )
         )
-        
-        story.append(
-            Paragraph(
-                f"<b>Did You Know?</b> {fact}",
-                normal
-            )
-        )
-
+       
         story.append(Spacer(1, 20))
 
     # ============================================================
