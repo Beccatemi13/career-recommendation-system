@@ -1292,7 +1292,7 @@ def admin_manage_careers():
                 learning_platforms,
                 industries,
                 career_outlook,
-                minimum_qualification,
+                minimum_qualification
                 
 
             FROM careers
@@ -1338,7 +1338,7 @@ def admin_manage_careers():
                 learning_platforms,
                 industries,
                 career_outlook,
-                minimum_qualification,
+                minimum_qualification
             
 
             FROM careers
